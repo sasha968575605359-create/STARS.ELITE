@@ -3,245 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stars Elite | Закрытый Дилер</title>
+    <title>STARS ELITE — Official Market</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;600;900&display=swap');
-        
-        :root {
-            --primary: #0088cc;
-            --dark-bg: #050505;
-            --card-bg: #0c0c0c;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        h1, .font-sync {
-            font-family: 'Syncopate', sans-serif;
-        }
-
-        .glass-card {
-            background: var(--card-bg);
-            border: 1px solid #1a1a1a;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .glass-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 50px rgba(0, 136, 204, 0.15);
-            transform: translateY(-10px);
-        }
-
-        .modal-overlay {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #111;
-            border: 1px solid #222;
-            width: 100%;
-            max-width: 450px;
-            transform: scale(0.9);
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-        }
-
-        .btn-main {
-            background: var(--primary);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-main:hover {
-            background: #00aaff;
-            box-shadow: 0 0 25px rgba(0, 136, 204, 0.5);
-        }
-
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-
-        .scan-effect::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent, rgba(0, 136, 204, 0.05), transparent);
-            animation: scanline 4s linear infinite;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        :root { --accent: #0088cc; --bg: #030303; }
+        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .premium-card { background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; transition: all 0.4s; overflow: hidden; }
+        .active-tab { color: var(--accent); border-bottom: 3px solid var(--accent); }
+        .glow-btn { background: linear-gradient(135deg, var(--accent) 0%, #005580 100%); box-shadow: 0 10px 20px rgba(0, 136, 204, 0.3); }
+        .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .live-notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 50px; z-index: 100; font-size: 11px; transition: 0.5s; width: 90%; max-width: 320px; }
+        .live-notif.show { transform: translateX(-50%) translateY(0); }
+        .vip-status { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 900; text-transform: uppercase; }
+        .nft-icon-box { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,136,204,0.1) 0%, transparent 70%); }
+        .resale-tag { background: #4ade80; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
     </style>
 </head>
-<body class="p-4 md:p-10 scan-effect">
+<body class="min-h-screen flex flex-col items-center p-5">
 
-    <!-- Header -->
-    <header class="max-w-6xl mx-auto text-center mb-20">
-        <div class="inline-block px-4 py-1 border border-blue-500/30 rounded-full text-[10px] uppercase tracking-[0.3em] text-blue-400 mb-6 font-bold">
-            Private Access Only
+    <div id="notif" class="live-notif flex items-center gap-3">
+        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        <span id="notif-text">Юзер @**** купил Rocket Launch</span>
+    </div>
+
+    <header class="w-full max-w-md flex justify-between items-center py-6">
+        <div class="text-left">
+            <h1 class="text-4xl font-black italic tracking-tighter leading-none">STARS <span class="text-cyan-500">ELITE</span></h1>
+            <div class="flex items-center mt-2 gap-2">
+                <span class="text-[8px] font-bold text-gray-500">ONLINE: <span id="online-count" class="text-green-500">142</span></span>
+                <span id="rank-badge" class="vip-status bg-gray-800 text-gray-400">Bronze</span>
+            </div>
         </div>
-        <h1 class="text-5xl md:text-8xl font-bold tracking-tighter mb-4 italic uppercase">STARS<span class="text-blue-500">.</span>ELITE</h1>
-        <p class="text-zinc-500 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
-            Хватит кормить систему. Забирай статус за полцены. Прямые поставки без накруток.
-        </p>
+        <button onclick="openCart()" class="relative p-4 bg-white/5 rounded-2xl border border-white/10 active:scale-90 transition-all">
+            <i class="fa-solid fa-cart-shopping text-xl"></i>
+            <span id="cart-count" class="cart-badge hidden">0</span>
+        </button>
     </header>
 
-    <!-- Store Grid -->
-    <main class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <!-- Лот 25 -> 15 -->
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🎁</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">COLLECTION 01</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Gift Box</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">25</span>
-                <span class="text-4xl font-black text-white italic">15 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
-            </div>
-            <button onclick="openModal('Gift Box', '15 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
+    <div class="w-full max-w-md flex-1 overflow-y-auto pb-40">
+        <div class="flex mb-6 border-b border-white/5 sticky top-0 bg-[#030303]/90 backdrop-blur-md z-10">
+            <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-4 text-[10px] font-black tracking-widest active-tab uppercase transition-all">STARS</button>
+            <button onclick="switchTab('premium')" id="tab-premium" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">PREMIUM</button>
+            <button onclick="switchTab('nft')" id="tab-nft" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">GIFTS / NFT</button>
         </div>
+        <div id="product-list" class="grid grid-cols-1 gap-4 px-1"></div>
+    </div>
 
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🌹</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">COLLECTION 01</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Classic Rose</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">25</span>
-                <span class="text-4xl font-black text-white italic">15 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
+    <div class="fixed bottom-0 w-full max-w-md p-5 bg-black/80 backdrop-blur-md border-t border-white/5 z-20">
+        <button onclick="checkout()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95 transition-all">Оформить заказ</button>
+    </div>
+
+    <!-- Корзина -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="premium-card w-full max-w-md p-6 border border-white/10 flex flex-col max-h-[85vh]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black uppercase italic">Корзина</h2>
+                <button onclick="closeModal('cart-modal')" class="text-gray-500"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <button onclick="openModal('Classic Rose', '15 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
-        </div>
-
-        <!-- Лот 50 -> 25 -->
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🚀</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">VELOCITY</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Rocket Ship</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">50</span>
-                <span class="text-4xl font-black text-white italic">25 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2"></div>
+            <div class="border-t border-white/10 pt-4 mb-6">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-500 font-bold uppercase text-[10px]">К оплате:</span>
+                    <span id="total-price" class="text-2xl font-black text-cyan-500">0</span>
+                </div>
             </div>
-            <button onclick="openModal('Rocket Ship', '25 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
-        </div>
-
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🍾</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">CELEBRATION</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Bubbly</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">50</span>
-                <span class="text-4xl font-black text-white italic">25 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
-            </div>
-            <button onclick="openModal('Bubbly', '25 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
-        </div>
-
-        <!-- Лот 100 -> 50 -->
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">🏆</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">SUPREMACY</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Grand Trophy</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">100</span>
-                <span class="text-4xl font-black text-white italic">50 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
-            </div>
-            <button onclick="openModal('Grand Trophy', '50 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
-        </div>
-
-        <div class="glass-card rounded-[2.5rem] p-10 flex flex-col items-center group">
-            <div class="text-8xl mb-8 group-hover:scale-110 transition-transform duration-500">💎</div>
-            <div class="font-sync text-sm tracking-[0.2em] text-zinc-500 mb-2">LUXURY</div>
-            <h3 class="text-2xl font-black italic uppercase mb-6 tracking-tighter">Pure Diamond</h3>
-            <div class="flex items-baseline gap-3 mb-8">
-                <span class="text-zinc-700 line-through text-lg">100</span>
-                <span class="text-4xl font-black text-white italic">50 <span class="text-blue-500 text-xl italic font-bold">⭐</span></span>
-            </div>
-            <button onclick="openModal('Pure Diamond', '50 ⭐')" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-sm">Забрать</button>
-        </div>
-
-    </main>
-
-    <!-- Modal Window -->
-    <div id="orderModal" class="modal-overlay" onclick="closeModal(event)">
-        <div class="modal-content rounded-[3rem] p-10 text-center relative" onclick="event.stopPropagation()">
-            <button onclick="document.getElementById('orderModal').classList.remove('active')" class="absolute top-6 right-8 text-zinc-600 hover:text-white transition-colors">
-                <i class="fa-solid fa-xmark text-2xl"></i>
-            </button>
-            
-            <div id="modalIcon" class="text-8xl mb-6">🎁</div>
-            <h2 id="modalTitle" class="text-3xl font-black uppercase italic italic mb-2 tracking-tighter">Название</h2>
-            <p class="text-zinc-500 mb-8 font-medium">Лот готов к отправке</p>
-            
-            <div class="bg-zinc-900 rounded-2xl p-6 mb-8 flex justify-between items-center border border-zinc-800">
-                <span class="text-zinc-500 font-bold uppercase text-xs tracking-widest">Итого к оплате:</span>
-                <span id="modalPrice" class="text-2xl font-black italic text-blue-500">0 ⭐</span>
-            </div>
-            
-            <a id="modalTgLink" href="#" class="btn-main w-full py-5 rounded-2xl font-black uppercase tracking-widest italic text-lg flex items-center justify-center gap-3">
-                <i class="fa-brands fa-telegram text-2xl"></i> СВЯЗЬ С НАМИ
-            </a>
-            
-            <p class="mt-6 text-[10px] text-zinc-600 uppercase tracking-widest font-bold">Гарантированная доставка в течение 5 минут</p>
+            <button onclick="checkout()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm tracking-widest">Перейти к оплате</button>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="max-w-6xl mx-auto mt-32 text-center border-t border-zinc-900 pt-20 pb-10">
-        <div class="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-700 mb-4">Elite Trading Network © 2026</div>
-        <p class="text-zinc-600 text-xs">Все сделки защищены. Мы не имеем отношения к Telegram FDN.</p>
-    </footer>
+    <!-- Оплата -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="premium-card w-full max-w-md p-8 text-center border border-white/10">
+            <div class="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-shield-halved text-2xl text-cyan-500"></i>
+            </div>
+            <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата заказа</h2>
+            <div id="payment-instructions" class="text-left text-sm space-y-4 mb-8 bg-white/5 p-4 rounded-2xl border border-white/5"></div>
+            <div class="space-y-3">
+                <p class="text-gray-400 text-[9px] uppercase font-bold tracking-widest">Скрин чека слать сюда:</p>
+                <a href="https://t.me/dolbayob89" class="block bg-white text-black py-4 rounded-xl font-black text-lg">@dolbayob89</a>
+                <button onclick="closeModal('contact-modal')" class="text-gray-600 text-[10px] font-bold uppercase pt-2">Закрыть</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const tgUsername = "@dolbayob89"; // ЗАМЕНИ ЭТО, БЛЯТЬ!
+        const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
+        const ADMIN_ID = "7811669365";
+        const WALLET = "UQD3W--X8UafHqQK9GDyrYNuuEHWBQrvnOU61-s1shpGWdcr";
+        const USERNAME = "@dolbayob89";
 
-        function openModal(name, price) {
-            const modal = document.getElementById('orderModal');
-            const icons = {
-                'Gift Box': '🎁',
-                'Classic Rose': '🌹',
-                'Rocket Ship': '🚀',
-                'Bubbly': '🍾',
-                'Grand Trophy': '🏆',
-                'Pure Diamond': '💎'
-            };
+        let currentMode = 'stars';
+        let cart = JSON.parse(localStorage.getItem('elite_cart') || '[]');
 
-            document.getElementById('modalTitle').innerText = name;
-            document.getElementById('modalPrice').innerText = price;
-            document.getElementById('modalIcon').innerText = icons[name] || '⭐';
-            
-            const message = encodeURIComponent(`Эй! Хочу забрать "${name}" за ${price}. Жду реквизиты.`);
-            document.getElementById('modalTgLink').href = `https://t.me/${tgUsername}?text=${message}`;
-            
-            modal.classList.add('active');
+        const items = {
+            stars: [
+                { id: 'st1', val: '25 Stars', cost: 15, cur: '⭐️' },
+                { id: 'st3', val: '100 Stars', cost: 50, cur: '⭐️' },
+                { id: 'st6', val: '400 Stars', cost: 115, cur: '⭐️' },
+                { id: 'st10', val: '1000 Stars', cost: 250, cur: '⭐️' }
+            ],
+            premium: [
+                { id: 'p3', val: 'Premium 3 Месяца', cost: 45, cur: '⭐️', icon: 'fa-star' },
+                { id: 'p6', val: 'Premium 6 Месяцев', cost: 75, cur: '⭐️', icon: 'fa-star' },
+                { id: 'p12', val: 'Premium 12 Месяцев', cost: 120, cur: '⭐️', icon: 'fa-star' }
+            ],
+            nft: [
+                { id: 'n1', val: 'Vice Cream', cost: 100, cur: '⭐️', link: 'https://t.me/nft/ViceCream-143164', icon: 'fa-ice-cream' },
+                { id: 'n2', val: 'Ice Cream', cost: 100, cur: '⭐️', link: 'https://t.me/nft/IceCream-237536', icon: 'fa-ice-cream' },
+                { id: 'n3', val: 'Fresh Socks', cost: 200, cur: '⭐️', link: 'https://t.me/nft/FreshSocks-136186', icon: 'fa-socks' },
+                { id: 'n4', val: 'Stellar Rocket', cost: 215, cur: '⭐️', link: 'https://t.me/nft/StellarRocket-94440', icon: 'fa-rocket' }
+            ]
+        };
+
+        function showFakeNotif() {
+            const list = items[currentMode] || items.stars;
+            const item = list[Math.floor(Math.random() * list.length)];
+            document.getElementById('notif-text').innerText = `Юзер @${Math.random().toString(36).substr(2,5)} купил ${item.val}`;
+            const el = document.getElementById('notif');
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 4000);
+            document.getElementById('online-count').innerText = 130 + Math.floor(Math.random() * 40);
+        }
+        setInterval(showFakeNotif, 15000);
+
+        function saveCart() { localStorage.setItem('elite_cart', JSON.stringify(cart)); updateCartCounter(); updateRank(); }
+        function switchTab(mode) { currentMode = mode; renderUI(); }
+        function addToCart(id) {
+            const product = items[currentMode].find(i => i.id === id);
+            cart.push({...product, cartId: Math.random().toString(36).substr(2, 9)});
+            saveCart();
+        }
+        function removeFromCart(cartId) { cart = cart.filter(i => i.cartId !== cartId); saveCart(); renderCartItems(); }
+        function updateCartCounter() {
+            const badge = document.getElementById('cart-count');
+            badge.innerText = cart.length;
+            badge.classList.toggle('hidden', cart.length === 0);
+        }
+        function updateRank() {
+            const badge = document.getElementById('rank-badge');
+            const len = cart.length;
+            if (len === 0) { badge.innerText = "Bronze"; badge.className = "vip-status bg-gray-800 text-gray-400"; }
+            else if (len < 3) { badge.innerText = "Silver"; badge.className = "vip-status bg-blue-900 text-blue-300"; }
+            else { badge.innerText = "Elite"; badge.className = "vip-status bg-cyan-900 text-cyan-300 shadow-lg shadow-cyan-500/20"; }
         }
 
-        function closeModal(event) {
-            document.getElementById('orderModal').classList.remove('active');
+        function renderUI() {
+            ['stars', 'premium', 'nft'].forEach(t => document.getElementById('tab-'+t).className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`);
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            items[currentMode].forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "premium-card p-5 border border-white/5";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-cyan-500 text-xl">
+                            <i class="fa-solid ${item.icon || (currentMode === 'stars' ? 'fa-bolt' : 'fa-gem')}"></i>
+                        </div>
+                        ${item.link ? `<div class="resale-tag">Fragment</div>` : ''}
+                    </div>
+                    <div class="flex justify-between items-end w-full">
+                        <div>
+                            <h3 class="text-lg font-black italic uppercase leading-none">${item.val}</h3>
+                            <p class="text-cyan-500 font-black mt-2">${item.cost} ${item.cur}</p>
+                            ${item.link ? `<a href="${item.link}" target="_blank" class="inline-block mt-3 text-[9px] font-bold text-gray-500 uppercase border-b border-gray-800 pb-1">Проверить оригинал <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>` : ''}
+                        </div>
+                        <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-xl flex items-center justify-center transition-all active:scale-90">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>`;
+                list.appendChild(card);
+            });
         }
 
-        // Закрытие по ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
+        function renderCartItems() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = cart.length === 0 ? '<div class="text-center py-10 text-gray-700 font-bold uppercase text-[10px]">Корзина пуста</div>' : '';
+            let totals = {};
+            cart.forEach(item => {
+                totals[item.cur] = (totals[item.cur] || 0) + item.cost;
+                container.innerHTML += `
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mr-4 text-cyan-500"><i class="fa-solid ${item.icon || 'fa-gem'}"></i></div>
+                            <div><p class="text-sm font-black italic uppercase">${item.val}</p><p class="text-[10px] text-cyan-500 font-bold">${item.cost} ${item.cur}</p></div>
+                        </div>
+                        <button onclick="removeFromCart('${item.cartId}')" class="text-red-900/50 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>`;
+            });
+            document.getElementById('total-price').innerText = Object.entries(totals).map(([cur, val]) => `${val.toFixed(2)} ${cur}`).join(' + ');
+        }
+
+        function openCart() { renderCartItems(); document.getElementById('cart-modal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        async function checkout() {
+            if (cart.length === 0) return;
+            let totals = {}; cart.forEach(i => totals[i.cur] = (totals[i.cur] || 0) + i.cost);
+            const sT = totals['⭐️'] || 0;
+            const tT = totals['TON'] || 0;
+            let instr = `<p class="font-bold text-white mb-2">Инструкция:</p>`;
+            if (sT > 0) instr += `<p>1. Отправь <b>${sT}</b> ⭐️ на <b>${USERNAME}</b></p>`;
+            if (tT > 0) instr += `<p>${sT>0?'2. ':'1. '}Отправь <b>${tT.toFixed(2)}</b> TON на:<br><span class="text-[10px] font-mono break-all text-cyan-400 select-all">${WALLET}</span></p>`;
+            instr += `<p class="mt-4 text-[11px] text-yellow-500">⚠️ После оплаты пришли скриншот чека в поддержку!</p>`;
+            document.getElementById('payment-instructions').innerHTML = instr;
+            closeModal('cart-modal');
+            document.getElementById('contact-modal').style.display = 'flex';
+            const msg = `💎 <b>ELITE ORDER</b>\n\n🛍 <b>Products:</b>\n${cart.map(i=>`• ${i.val}`).join('\n')}\n\n💰 <b>Total:</b> ${document.getElementById('total-price').innerText}`;
+            try { fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`); } catch (e) {}
+        }
+        window.onload = () => { updateCartCounter(); updateRank(); renderUI(); setTimeout(showFakeNotif, 3000); };
     </script>
 </body>
 </html>
