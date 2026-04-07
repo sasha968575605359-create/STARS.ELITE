@@ -3,283 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STARS ELITE — Official Market</title>
+    <title>Stars Elite - Технические работы</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        :root { --accent: #0088cc; --bg: #030303; --neon: #00f2ff; }
-        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        
-        .premium-card { background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; transition: all 0.4s; overflow: hidden; }
-        .active-tab { color: var(--accent); border-bottom: 3px solid var(--accent); }
-        .glow-btn { background: linear-gradient(135deg, var(--accent) 0%, #005580 100%); box-shadow: 0 10px 20px rgba(0, 136, 204, 0.3); }
-        
-        .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
-        
-        #easter-banner { border: 1px solid rgba(0, 242, 255, 0.3); position: relative; overflow: hidden; }
-        .css-egg {
-            width: 50px; height: 70px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            background: radial-gradient(circle at 30% 30%, var(--neon), #0044ff);
-            box-shadow: 0 0 25px rgba(0, 242, 255, 0.5); animation: float 3s infinite alternate ease-in-out;
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; overflow: hidden; }
+        .gradient-bg {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
-        @keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-10px) rotate(5deg); } }
-        .discount-text { text-shadow: 0 0 15px var(--neon); }
-        
-        .live-notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 50px; z-index: 100; font-size: 11px; transition: 0.5s; width: 90%; max-width: 320px; }
-        .live-notif.show { transform: translateX(-50%) translateY(0); }
-        
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .shimmer {
+            background: linear-gradient(90deg, #333 25%, #555 50%, #333 75%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .warning-box {
+            border: 1px solid #333;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 24px;
+            max-width: 90%;
+            width: 400px;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-5">
+<body>
 
-    <div id="notif" class="live-notif flex items-center gap-3">
-        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span id="notif-text">Buyer #**** приобрел 1000 Stars</span>
-    </div>
-
-    <header class="w-full max-w-md flex justify-between items-center py-6">
-        <div class="text-left">
-            <h1 class="text-4xl font-black italic tracking-tighter leading-none uppercase">Stars <span class="text-cyan-500">Elite</span></h1>
-            <div class="flex items-center mt-2 gap-2">
-                <span class="text-[8px] font-bold text-gray-500 uppercase">Online: <span class="text-green-500">241</span></span>
-                <span class="bg-gray-800 text-gray-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Bronze</span>
+<div class="gradient-bg">
+    <div class="warning-box">
+        <div class="mb-6 text-6xl">🛠️</div>
+        <h1 class="text-3xl font-black mb-4 uppercase tracking-tighter shimmer">Шлюз перегружен</h1>
+        <p class="text-gray-400 text-sm leading-relaxed mb-8">
+            Из-за аномального наплыва пользователей по акции <span class="text-yellow-500 font-bold">"EASTER ABUSE"</span> наши сервера временно приостановили прием новых транзакций. 
+        </p>
+        
+        <div class="space-y-4">
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-left">
+                <div class="text-[10px] text-gray-500 uppercase font-bold mb-1">Статус системы</div>
+                <div class="flex items-center text-sm font-bold text-yellow-400">
+                    <span class="relative flex h-2 w-2 mr-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                    </span>
+                    ОБРАБОТКА ОЧЕРЕДИ...
+                </div>
             </div>
-        </div>
-        <button onclick="openCart()" class="relative p-4 bg-white/5 rounded-2xl border border-white/10 active:scale-90 transition-all">
-            <i class="fa-solid fa-cart-shopping text-xl"></i>
-            <span id="cart-count" class="cart-badge hidden">0</span>
-        </button>
-    </header>
-
-    <div id="easter-section" class="w-full max-w-md mb-6">
-        <div id="easter-banner" class="premium-card p-6 flex items-center justify-between">
-            <div>
-                <h2 class="text-xl font-black italic uppercase discount-text">Easter Drop</h2>
-                <p class="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Скидка -50% на все паки</p>
-                <p id="countdown" class="text-[9px] text-gray-600 mt-2 font-mono uppercase">До конца: 04д 12ч 30м</p>
-            </div>
-            <div class="css-egg"></div>
-        </div>
-    </div>
-
-    <div class="w-full max-w-md flex-1 overflow-y-auto pb-40">
-        <div class="flex mb-6 border-b border-white/5 sticky top-0 bg-[#030303]/90 backdrop-blur-md z-10">
-            <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-4 text-[10px] font-black tracking-widest active-tab uppercase">Stars</button>
-            <button onclick="switchTab('premium')" id="tab-premium" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Premium</button>
-            <button onclick="switchTab('easter')" id="tab-easter" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Easter 🐣</button>
-            <button onclick="switchTab('reviews')" id="tab-reviews" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Reviews</button>
-        </div>
-        <div id="product-list" class="grid grid-cols-1 gap-4 px-1"></div>
-    </div>
-
-    <div class="fixed bottom-0 w-full max-w-md p-5 bg-black/80 backdrop-blur-md border-t border-white/5 z-20">
-        <button onclick="checkout()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95 transition-all">Оформить заказ</button>
-    </div>
-
-    <div id="cart-modal" class="modal-overlay">
-        <div class="premium-card w-full max-w-md p-6 flex flex-col max-h-[85vh]">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-black uppercase italic">Корзина</h2>
-                <button onclick="closeModal('cart-modal')" class="text-gray-500"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2"></div>
-            <div class="border-t border-white/10 pt-4 mb-6 text-right">
-                <span class="text-gray-500 font-bold uppercase text-[10px] block">Итоговая стоимость:</span>
-                <span id="total-price" class="text-2xl font-black text-cyan-500">0</span>
-                <p id="easter-promo-text" class="text-[9px] text-green-500 font-bold uppercase hidden">Easter Discount -50% Applied</p>
-            </div>
-            <button onclick="checkout()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm tracking-widest">Перейти к оплате</button>
-        </div>
-    </div>
-
-    <div id="contact-modal" class="modal-overlay">
-        <div class="premium-card w-full max-w-md p-8 text-center">
-            <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата</h2>
-            <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl"></div>
-            <a id="bot-link" href="#" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Перейти в бота</a>
-            <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Закрыть</button>
-        </div>
-    </div>
-
-    <script>
-        const USERNAME = "@dolbayob89";
-        const ADMIN_ID = "7811669365";
-        const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
-        const REFERRAL_TAG = "_tgr_VvkE7YAzNzUy";
-
-        const expiryDate = new Date("2026-04-13T00:00:00");
-        const isEasterActive = new Date() < expiryDate;
-
-        if (!isEasterActive) {
-            const eSec = document.getElementById('easter-section');
-            const eTab = document.getElementById('tab-easter');
-            if(eSec) eSec.remove();
-            if(eTab) eTab.remove();
-        }
-
-        let currentMode = 'stars';
-        let cart = [];
-
-        const items = {
-            stars: [
-                { id: 's1', val: '50 звезд', cost: 25, cur: '⭐️' },
-                { id: 's2', val: '100 звезд', cost: 50, cur: '⭐️' },
-                { id: 's3', val: '250 звезд', cost: 100, cur: '⭐️' },
-                { id: 's4', val: '500 звезд', cost: 300, cur: '⭐️' },
-                { id: 's5', val: '1000 звезд', cost: 500, cur: '⭐️' }
-            ],
-            premium: [
-                { id: 'p3', val: 'Premium 3 месяца', cost: 100, cur: '⭐️' },
-                { id: 'p6', val: 'Premium 6 месяца', cost: 200, cur: '⭐️' },
-                { id: 'p12', val: 'Premium 1 год', cost: 300, cur: '⭐️' }
-            ],
-            reviews: [
-                { user: 'Dmitry', text: 'Звезды пришли за 2 минуты, лучший сервис!', date: 'Сегодня' },
-                { user: 'Alexey', text: 'Пасхальный набор просто пушка по цене.', date: 'Вчера' },
-                { user: 'Ivan', text: 'Всё честно, беру не первый раз.', date: '2 дня назад' }
-            ]
-        };
-
-        function switchTab(mode) { currentMode = mode; renderUI(); }
-
-        function renderUI() {
-            const tabs = ['stars', 'premium', 'easter', 'reviews'];
-            tabs.forEach(t => {
-                const el = document.getElementById('tab-'+t);
-                if (el) el.className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`;
-            });
-
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-
-            if (currentMode === 'reviews') {
-                items.reviews.forEach(rev => {
-                    list.innerHTML += `
-                        <div class="premium-card p-5 mb-2">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-cyan-500 font-black text-xs uppercase">${rev.user}</span>
-                                <span class="text-[9px] text-gray-600">${rev.date}</span>
-                            </div>
-                            <p class="text-sm italic text-gray-300">"${rev.text}"</p>
-                        </div>`;
-                });
-                return;
-            }
-
-            items[currentMode].forEach(item => {
-                list.innerHTML += `
-                    <div class="premium-card p-5 mb-2 group">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h3 class="font-black italic uppercase group-hover:text-cyan-400 transition-colors">${item.val}</h3>
-                                <p class="text-cyan-500 font-black text-lg">${item.cost} ${item.cur}</p>
-                            </div>
-                            <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-2xl flex items-center justify-center active:scale-90 transition-all">
-                                <i class="fa-solid fa-plus text-black text-xl"></i>
-                            </button>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        function addToCart(id) {
-            const product = items[currentMode].find(i => i.id === id);
-            cart.push({...product, cartId: Math.random()});
-            updateCartCounter();
-            showNotif(`Добавлено: ${product.val}`);
-        }
-
-        function showNotif(text) {
-            const el = document.getElementById('notif');
-            document.getElementById('notif-text').innerText = text;
-            el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 2000);
-        }
-
-        function updateCartCounter() {
-            const badge = document.getElementById('cart-count');
-            badge.innerText = cart.length;
-            badge.classList.toggle('hidden', cart.length === 0);
-        }
-
-        function openCart() {
-            const container = document.getElementById('cart-items');
-            container.innerHTML = cart.length === 0 ? '<p class="text-center text-gray-600 uppercase text-[10px] font-bold py-10">Пусто</p>' : '';
-            let total = 0;
-            cart.forEach(item => {
-                total += item.cost;
-                container.innerHTML += `
-                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl mb-2">
-                        <span>${item.val}</span>
-                        <span class="text-cyan-500 font-black">${item.cost} ⭐️</span>
-                    </div>`;
-            });
-
-            const promoText = document.getElementById('easter-promo-text');
-            if (isEasterActive && total >= 250) {
-                total = Math.floor(total * 0.5);
-                promoText.classList.remove('hidden');
-            } else {
-                promoText.classList.add('hidden');
-            }
-
-            document.getElementById('total-price').innerText = total + " ⭐️";
-            document.getElementById('cart-modal').style.display = 'flex';
-        }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function checkout() {
-            if (cart.length === 0) return;
-            let total = cart.reduce((s, i) => s + i.cost, 0);
-            let usedPromo = false;
-            if (isEasterActive && total >= 250) {
-                total = Math.floor(total * 0.5);
-                usedPromo = true;
-            }
-
-            const botLink = `https://t.me/starseliteofficial_bot?start=${total}${REFERRAL_TAG}`;
-            document.getElementById('bot-link').href = botLink;
             
-            document.getElementById('payment-instructions').innerHTML = `
-                Сумма заказа: <b>${total} ⭐️</b><br><br>
-                Нажми на кнопку ниже, чтобы перейти в бота и завершить покупку.`;
-            
-            closeModal('cart-modal');
-            document.getElementById('contact-modal').style.display = 'flex';
+            <p class="text-[11px] text-gray-600">
+                Ориентировочное время восстановления: <b>24 часа</b>.<br>
+                Пожалуйста, сохраните ссылку и попробуйте позже.
+            </p>
+        </div>
 
-            // Уведомление о заказе
-            const msg = `🛒 <b>НОВЫЙ ЗАКАЗ</b>\n\n💰 Сумма: ${total} Stars\n🔥 Скидка: ${usedPromo ? 'ПРИМЕНЕНА (-50%)' : 'НЕТ'}\n📦 Товары: ${cart.map(i=>i.val).join(', ')}`;
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
+        <div class="mt-8 pt-6 border-t border-white/5">
+            <p class="text-[9px] text-gray-700 uppercase tracking-widest font-bold">Secure Stars Gateway v.2.4</p>
+        </div>
+    </div>
+</div>
 
-            setTimeout(() => {
-                window.open(botLink, '_blank');
-            }, 1500);
-        }
+<script>
+    // Блокируем контекстное меню, чтоб не палили код
+    document.oncontextmenu = () => false;
+    
+    // Выводим в консоль статус для Макарова
+    console.log("%c СИСТЕМА В РЕЖИМЕ ОЖИДАНИЯ. БОТ ОТКЛЮЧЕН. ", "background: red; color: white; font-weight: bold; padding: 10px;");
+</script>
 
-        // Уведомление о визите на сайт
-        function notifyVisit() {
-            const now = new Date();
-            const timeStr = now.toLocaleString('ru-RU', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
-            const ref = document.referrer ? document.referrer : 'Прямой заход';
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? '📱 Мобильный' : '💻 ПК';
-            const lang = navigator.language || '—';
-
-            const visitMsg = `👁 <b>НОВЫЙ ВИЗИТ НА САЙТ</b>\n\n🕐 Время: ${timeStr} (МСК)\n${isMobile}\n🌐 Язык: ${lang}\n🔗 Источник: ${ref}`;
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: ADMIN_ID, text: visitMsg, parse_mode: 'HTML' })
-            });
-        }
-
-        window.onload = function() {
-            renderUI();
-            notifyVisit();
-        };
-    </script>
 </body>
 </html>
