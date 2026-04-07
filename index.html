@@ -111,8 +111,7 @@
         const USERNAME = "@dolbayob89";
         const ADMIN_ID = "7811669365";
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
-        // Твоя рефка
-        const REFERRAL_LINK = "https://t.me/starseliteofficial_bot?start=_tgr_VvkE7YAzNzUy";
+        const REFERRAL_TAG = "_tgr_VvkE7YAzNzUy";
 
         // САМОЛИКВИДАТОР: 13 Апреля 2026 все пасхалки исчезнут
         const expiryDate = new Date("2026-04-13T00:00:00");
@@ -246,8 +245,8 @@
                 usedPromo = true;
             }
 
-            // Динамическая ссылка с суммой заказа
-            const botLink = `https://t.me/starseliteofficial_bot?start=${total}`;
+            // Динамическая ссылка: сумма + рефка партнерки
+            const botLink = `https://t.me/starseliteofficial_bot?start=${total}${REFERRAL_TAG}`;
             document.getElementById('bot-link').href = botLink;
             
             // Настройка текста в модалке перед перебросом
