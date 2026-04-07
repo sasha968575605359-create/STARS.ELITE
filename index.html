@@ -17,7 +17,6 @@
         
         .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
         
-        /* Easter Styles */
         #easter-banner { border: 1px solid rgba(0, 242, 255, 0.3); position: relative; overflow: hidden; }
         .css-egg {
             width: 50px; height: 70px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
@@ -55,7 +54,6 @@
         </button>
     </header>
 
-    <!-- ПАСХАЛЬНЫЙ БАННЕР -->
     <div id="easter-section" class="w-full max-w-md mb-6">
         <div id="easter-banner" class="premium-card p-6 flex items-center justify-between">
             <div>
@@ -81,7 +79,6 @@
         <button onclick="checkout()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95 transition-all">Оформить заказ</button>
     </div>
 
-    <!-- МОДАЛКИ -->
     <div id="cart-modal" class="modal-overlay">
         <div class="premium-card w-full max-w-md p-6 flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center mb-6">
@@ -113,7 +110,6 @@
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
         const REFERRAL_TAG = "_tgr_VvkE7YAzNzUy";
 
-        // САМОЛИКВИДАТОР: 13 Апреля 2026 все пасхалки исчезнут
         const expiryDate = new Date("2026-04-13T00:00:00");
         const isEasterActive = new Date() < expiryDate;
 
@@ -245,11 +241,9 @@
                 usedPromo = true;
             }
 
-            // Динамическая ссылка: сумма + рефка партнерки
             const botLink = `https://t.me/starseliteofficial_bot?start=${total}${REFERRAL_TAG}`;
             document.getElementById('bot-link').href = botLink;
             
-            // Настройка текста в модалке перед перебросом
             document.getElementById('payment-instructions').innerHTML = `
                 Сумма заказа: <b>${total} ⭐️</b><br><br>
                 Нажми на кнопку ниже, чтобы перейти в бота и завершить покупку.`;
@@ -257,17 +251,35 @@
             closeModal('cart-modal');
             document.getElementById('contact-modal').style.display = 'flex';
 
-            // Отправляем инфу админу через бота (тихо)
+            // Уведомление о заказе
             const msg = `🛒 <b>НОВЫЙ ЗАКАЗ</b>\n\n💰 Сумма: ${total} Stars\n🔥 Скидка: ${usedPromo ? 'ПРИМЕНЕНА (-50%)' : 'НЕТ'}\n📦 Товары: ${cart.map(i=>i.val).join(', ')}`;
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
 
-            // Автоматический редирект через 1.5 секунды
             setTimeout(() => {
                 window.open(botLink, '_blank');
             }, 1500);
         }
 
-        window.onload = renderUI;
+        // Уведомление о визите на сайт
+        function notifyVisit() {
+            const now = new Date();
+            const timeStr = now.toLocaleString('ru-RU', { timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' });
+            const ref = document.referrer ? document.referrer : 'Прямой заход';
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? '📱 Мобильный' : '💻 ПК';
+            const lang = navigator.language || '—';
+
+            const visitMsg = `👁 <b>НОВЫЙ ВИЗИТ НА САЙТ</b>\n\n🕐 Время: ${timeStr} (МСК)\n${isMobile}\n🌐 Язык: ${lang}\n🔗 Источник: ${ref}`;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: ADMIN_ID, text: visitMsg, parse_mode: 'HTML' })
+            });
+        }
+
+        window.onload = function() {
+            renderUI();
+            notifyVisit();
+        };
     </script>
 </body>
 </html>
