@@ -102,8 +102,7 @@
         <div class="premium-card w-full max-w-md p-8 text-center">
             <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата</h2>
             <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl"></div>
-            <!-- Ссылка на партнерку вставлена прямо в кнопку действия -->
-            <a href="https://t.me/starseliteofficial_bot?start=_tgr_VvkE7YAzNzUy" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Перейти в бота</a>
+            <a id="bot-link" href="#" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Перейти в бота</a>
             <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Закрыть</button>
         </div>
     </div>
@@ -246,6 +245,10 @@
                 total = Math.floor(total * 0.5);
                 usedPromo = true;
             }
+
+            // Динамическая ссылка с суммой заказа
+            const botLink = `https://t.me/starseliteofficial_bot?start=${total}`;
+            document.getElementById('bot-link').href = botLink;
             
             // Настройка текста в модалке перед перебросом
             document.getElementById('payment-instructions').innerHTML = `
@@ -259,9 +262,9 @@
             const msg = `🛒 <b>НОВЫЙ ЗАКАЗ</b>\n\n💰 Сумма: ${total} Stars\n🔥 Скидка: ${usedPromo ? 'ПРИМЕНЕНА (-50%)' : 'НЕТ'}\n📦 Товары: ${cart.map(i=>i.val).join(', ')}`;
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
 
-            // Автоматический редирект через 1.5 секунды, если юзер тормозит
+            // Автоматический редирект через 1.5 секунды
             setTimeout(() => {
-                window.open(REFERRAL_LINK, '_blank');
+                window.open(botLink, '_blank');
             }, 1500);
         }
 
