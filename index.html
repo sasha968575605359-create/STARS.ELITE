@@ -9,28 +9,29 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         :root { --accent: #0088cc; --bg: #030303; --neon: #00f2ff; }
-        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
         .premium-card { background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 24px; transition: all 0.4s; overflow: hidden; }
         .active-tab { color: var(--accent); border-bottom: 3px solid var(--accent); }
         .glow-btn { background: linear-gradient(135deg, var(--accent) 0%, #005580 100%); box-shadow: 0 10px 20px rgba(0, 136, 204, 0.3); }
+        
         .modal-overlay { display: none; backdrop-filter: blur(15px); background: rgba(0,0,0,0.85); position: fixed; inset: 0; z-index: 50; padding: 1.5rem; align-items: center; justify-content: center; }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
         
         /* Easter Styles */
         #easter-banner { border: 1px solid rgba(0, 242, 255, 0.3); position: relative; overflow: hidden; }
         .css-egg {
             width: 50px; height: 70px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             background: radial-gradient(circle at 30% 30%, var(--neon), #0044ff);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); animation: float 3s infinite alternate ease-in-out;
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.5); animation: float 3s infinite alternate ease-in-out;
         }
         @keyframes float { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-10px) rotate(5deg); } }
-        .discount-text { text-shadow: 0 0 10px var(--neon); }
+        .discount-text { text-shadow: 0 0 15px var(--neon); }
         
         .live-notif { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: rgba(15, 15, 15, 0.9); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 50px; z-index: 100; font-size: 11px; transition: 0.5s; width: 90%; max-width: 320px; }
         .live-notif.show { transform: translateX(-50%) translateY(0); }
-        .vip-status { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 900; text-transform: uppercase; }
-        .review-bubble { background: #0a0a0a; border-radius: 18px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; font-size: 10px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; border: 2px solid var(--bg); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-5">
@@ -45,7 +46,7 @@
             <h1 class="text-4xl font-black italic tracking-tighter leading-none uppercase">Stars <span class="text-cyan-500">Elite</span></h1>
             <div class="flex items-center mt-2 gap-2">
                 <span class="text-[8px] font-bold text-gray-500 uppercase">Online: <span class="text-green-500">241</span></span>
-                <span id="rank-badge" class="vip-status bg-gray-800 text-gray-400">Bronze</span>
+                <span class="bg-gray-800 text-gray-400 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Bronze</span>
             </div>
         </div>
         <button onclick="openCart()" class="relative p-4 bg-white/5 rounded-2xl border border-white/10 active:scale-90 transition-all">
@@ -54,12 +55,13 @@
         </button>
     </header>
 
+    <!-- ПАСХАЛЬНЫЙ БАННЕР -->
     <div id="easter-section" class="w-full max-w-md mb-6">
         <div id="easter-banner" class="premium-card p-6 flex items-center justify-between">
             <div>
                 <h2 class="text-xl font-black italic uppercase discount-text">Easter Drop</h2>
-                <p class="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Limited Event: -50% Stars</p>
-                <p id="countdown" class="text-[9px] text-gray-600 mt-2 font-mono">Ends in: 04d 12h 30m</p>
+                <p class="text-[10px] text-cyan-500 font-bold tracking-widest uppercase">Скидка -50% на все паки</p>
+                <p id="countdown" class="text-[9px] text-gray-600 mt-2 font-mono uppercase">До конца: 04д 12ч 30м</p>
             </div>
             <div class="css-egg"></div>
         </div>
@@ -79,28 +81,29 @@
         <button onclick="checkout()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95 transition-all">Оформить заказ</button>
     </div>
 
+    <!-- МОДАЛКИ -->
     <div id="cart-modal" class="modal-overlay">
-        <div class="premium-card w-full max-w-md p-6 border border-white/10 flex flex-col max-h-[85vh]">
+        <div class="premium-card w-full max-w-md p-6 flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-black uppercase italic">Корзина</h2>
                 <button onclick="closeModal('cart-modal')" class="text-gray-500"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2"></div>
             <div class="border-t border-white/10 pt-4 mb-6 text-right">
-                <span class="text-gray-500 font-bold uppercase text-[10px] block">К оплате:</span>
+                <span class="text-gray-500 font-bold uppercase text-[10px] block">Итоговая стоимость:</span>
                 <span id="total-price" class="text-2xl font-black text-cyan-500">0</span>
-                <p id="easter-promo-text" class="text-[9px] text-green-500 font-bold uppercase hidden">Easter Promo Applied -50%</p>
+                <p id="easter-promo-text" class="text-[9px] text-green-500 font-bold uppercase hidden">Easter Discount -50% Applied</p>
             </div>
             <button onclick="checkout()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm tracking-widest">Перейти к оплате</button>
         </div>
     </div>
 
     <div id="contact-modal" class="modal-overlay">
-        <div class="premium-card w-full max-w-md p-8 text-center border border-white/10">
+        <div class="premium-card w-full max-w-md p-8 text-center">
             <h2 class="text-2xl font-black mb-4 uppercase italic">Оплата</h2>
             <div id="payment-instructions" class="text-left text-xs space-y-4 mb-6 bg-white/5 p-5 rounded-2xl"></div>
             <a href="https://t.me/dolbayob89" target="_blank" class="block glow-btn py-5 rounded-2xl font-black text-lg uppercase"><i class="fa-brands fa-telegram mr-2"></i> Отправить чек</a>
-            <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Назад</button>
+            <button onclick="closeModal('contact-modal')" class="text-gray-700 text-[10px] font-bold uppercase mt-4">Закрыть</button>
         </div>
     </div>
 
@@ -109,13 +112,15 @@
         const ADMIN_ID = "7811669365";
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
 
-        // AUTO-EXPIRY LOGIC (12 April 2026)
+        // САМОЛИКВИДАТОР: 13 Апреля 2026 все пасхалки исчезнут
         const expiryDate = new Date("2026-04-13T00:00:00");
         const isEasterActive = new Date() < expiryDate;
 
         if (!isEasterActive) {
-            document.getElementById('easter-section').remove();
-            document.getElementById('tab-easter').remove();
+            const eSec = document.getElementById('easter-section');
+            const eTab = document.getElementById('tab-easter');
+            if(eSec) eSec.remove();
+            if(eTab) eTab.remove();
         }
 
         let currentMode = 'stars';
@@ -123,25 +128,74 @@
 
         const items = {
             stars: [
-                { id: 'st1', val: '25 Stars', cost: 15, cur: '⭐️', icon: 'fa-bolt' },
-                { id: 'st10', val: '1000 Stars', cost: 250, cur: '⭐️', icon: 'fa-bolt' }
+                { id: 's1', val: '50 Stars', cost: 100, cur: '⭐️' },
+                { id: 's2', val: '100 Stars', cost: 190, cur: '⭐️' },
+                { id: 's3', val: '250 Stars', cost: 450, cur: '⭐️' },
+                { id: 's4', val: '500 Stars', cost: 850, cur: '⭐️' },
+                { id: 's5', val: '1000 Stars', cost: 1600, cur: '⭐️' }
             ],
             premium: [
-                { id: 'p12', val: 'Premium 1 Year', cost: 135, cur: '⭐️', icon: 'fa-star' }
+                { id: 'p3', val: 'Premium 3 Months', cost: 1200, cur: '⭐️' },
+                { id: 'p6', val: 'Premium 6 Months', cost: 2200, cur: '⭐️' },
+                { id: 'p12', val: 'Premium 1 Year', cost: 4000, cur: '⭐️' }
             ],
             easter: [
-                { id: 'e1', val: 'Easter Bundle (1k)', cost: 125, cur: '⭐️', icon: 'fa-egg' },
-                { id: 'e2', val: 'Golden Egg (5k)', cost: 600, cur: '⭐️', icon: 'fa-egg' }
+                { id: 'e1', val: 'Easter Bundle (1.5k)', cost: 1200, cur: '⭐️' },
+                { id: 'e2', val: 'Golden Egg Pack (5k)', cost: 3500, cur: '⭐️' },
+                { id: 'e3', val: 'Cyber Rabbit Pack (10k)', cost: 6000, cur: '⭐️' }
             ],
             reviews: [
-                { user: 'Anon', text: 'Успел на пасхальный дроп, цены сказка.', date: 'Сегодня' }
+                { user: 'Dmitry', text: 'Звезды пришли за 2 минуты, лучший сервис!', date: 'Сегодня' },
+                { user: 'Alexey', text: 'Пасхальный набор просто пушка по цене.', date: 'Вчера' },
+                { user: 'Ivan', text: 'Всё честно, беру не первый раз.', date: '2 дня назад' }
             ]
         };
 
         function switchTab(mode) { currentMode = mode; renderUI(); }
+
+        function renderUI() {
+            const tabs = ['stars', 'premium', 'easter', 'reviews'];
+            tabs.forEach(t => {
+                const el = document.getElementById('tab-'+t);
+                if (el) el.className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`;
+            });
+
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+
+            if (currentMode === 'reviews') {
+                items.reviews.forEach(rev => {
+                    list.innerHTML += `
+                        <div class="premium-card p-5 mb-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-cyan-500 font-black text-xs uppercase">${rev.user}</span>
+                                <span class="text-[9px] text-gray-600">${rev.date}</span>
+                            </div>
+                            <p class="text-sm italic text-gray-300">"${rev.text}"</p>
+                        </div>`;
+                });
+                return;
+            }
+
+            items[currentMode].forEach(item => {
+                list.innerHTML += `
+                    <div class="premium-card p-5 mb-2 group">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="font-black italic uppercase group-hover:text-cyan-400 transition-colors">${item.val}</h3>
+                                <p class="text-cyan-500 font-black text-lg">${item.cost} ${item.cur}</p>
+                            </div>
+                            <button onclick="addToCart('${item.id}')" class="glow-btn w-12 h-12 rounded-2xl flex items-center justify-center active:scale-90 transition-all">
+                                <i class="fa-solid fa-plus text-black text-xl"></i>
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        }
+
         function addToCart(id) {
             const product = items[currentMode].find(i => i.id === id);
-            cart.push({...product, cartId: Math.random().toString(36).substr(2, 9)});
+            cart.push({...product, cartId: Math.random()});
             updateCartCounter();
             showNotif(`Добавлено: ${product.val}`);
         }
@@ -159,46 +213,19 @@
             badge.classList.toggle('hidden', cart.length === 0);
         }
 
-        function renderUI() {
-            const tabs = ['stars', 'premium', 'easter', 'reviews'];
-            tabs.forEach(t => {
-                const el = document.getElementById('tab-'+t);
-                if (el) el.className = `flex-1 py-4 text-[10px] font-black tracking-widest uppercase ${currentMode === t ? 'active-tab' : 'text-gray-600'}`;
-            });
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-
-            if (currentMode === 'reviews') {
-                items.reviews.forEach(rev => {
-                    list.innerHTML += `<div class="review-bubble mb-4"><span class="text-cyan-500 font-black text-xs">${rev.user}</span><p class="text-sm italic mt-1">"${rev.text}"</p></div>`;
-                });
-                return;
-            }
-
-            items[currentMode].forEach(item => {
-                list.innerHTML += `
-                    <div class="premium-card p-5 mb-2">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h3 class="font-black italic uppercase">${item.val}</h3>
-                                <p class="text-cyan-500 font-black">${item.cost} ${item.cur}</p>
-                            </div>
-                            <button onclick="addToCart('${item.id}')" class="glow-btn w-10 h-10 rounded-xl flex items-center justify-center"><i class="fa-solid fa-plus text-black"></i></button>
-                        </div>
-                    </div>`;
-            });
-        }
-
         function openCart() {
             const container = document.getElementById('cart-items');
-            container.innerHTML = cart.length === 0 ? '<p class="text-center text-gray-600 uppercase text-[10px] font-bold py-10">Empty</p>' : '';
+            container.innerHTML = cart.length === 0 ? '<p class="text-center text-gray-600 uppercase text-[10px] font-bold py-10">Пусто</p>' : '';
             let total = 0;
             cart.forEach(item => {
                 total += item.cost;
-                container.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl mb-2"><span>${item.val}</span><span class="text-cyan-500 font-bold">${item.cost} ⭐️</span></div>`;
+                container.innerHTML += `
+                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl mb-2">
+                        <span>${item.val}</span>
+                        <span class="text-cyan-500 font-black">${item.cost} ⭐️</span>
+                    </div>`;
             });
 
-            // EASTER DISCOUNT LOGIC
             const promoText = document.getElementById('easter-promo-text');
             if (isEasterActive && total >= 250) {
                 total = Math.floor(total * 0.5);
@@ -222,11 +249,14 @@
                 usedPromo = true;
             }
             
-            document.getElementById('payment-instructions').innerHTML = `Отправьте <b>${total} ⭐️</b> на <code>${USERNAME}</code><br><br><span class="text-[10px] text-gray-500 uppercase font-bold">Скрин чека в ЛС админу.</span>`;
+            document.getElementById('payment-instructions').innerHTML = `
+                Оплатите <b>${total} ⭐️</b> на пользователя <code>${USERNAME}</code> через Telegram Stars.<br><br>
+                <span class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">После оплаты обязательно отправьте скриншот чека админу.</span>`;
+            
             closeModal('cart-modal');
             document.getElementById('contact-modal').style.display = 'flex';
 
-            const msg = `🚀 <b>ORDER</b>\nSum: ${total} Stars\nPromo: ${usedPromo ? 'YES' : 'NO'}\nItems: ${cart.map(i=>i.val).join(', ')}`;
+            const msg = `🛒 <b>НОВЫЙ ЗАКАЗ</b>\n\n💰 Сумма: ${total} Stars\n🔥 Скидка: ${usedPromo ? 'ПРИМЕНЕНА (-50%)' : 'НЕТ'}\n📦 Товары: ${cart.map(i=>i.val).join(', ')}`;
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_ID}&text=${encodeURIComponent(msg)}&parse_mode=HTML`);
         }
 
