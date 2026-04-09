@@ -31,11 +31,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .active-tab {
-            color: var(--accent);
-            border-bottom: 3px solid var(--accent);
-            background: rgba(255, 183, 3, 0.05);
-        }
+        .active-tab { color: var(--accent); border-bottom: 3px solid var(--accent); background: rgba(255, 183, 3, 0.05); }
 
         .glow-btn {
             background: linear-gradient(135deg, var(--accent) 0%, #e6a600 100%);
@@ -57,19 +53,13 @@
 
         .cart-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -5px; right: -5px;
             background: var(--easter-pink);
-            color: white;
-            font-size: 10px;
-            width: 22px;
-            height: 22px;
+            color: white; font-size: 10px;
+            width: 22px; height: 22px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            border: 2px solid var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; border: 2px solid var(--bg);
             animation: pulse 2s infinite;
         }
 
@@ -79,40 +69,15 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 133, 161, 0); }
         }
 
-        .easter-decoration {
-            position: absolute;
-            font-size: 24px;
-            pointer-events: none;
-            opacity: 0.2;
-            z-index: 0;
-        }
-
-        .product-enter {
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
+        input, select { outline: none; border: 1px solid rgba(255, 183, 3, 0.1); }
+        input:focus, select:focus { border-color: var(--accent); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center p-5">
 
-    <div class="easter-decoration" style="top: 10%; left: 5%;">🥚</div>
-    <div class="easter-decoration" style="top: 15%; right: 8%;">🐰</div>
-    <div class="easter-decoration" style="bottom: 20%; left: 10%;">🐣</div>
-
-    <!-- Header -->
     <header class="w-full max-w-md flex justify-between items-center py-8 z-10">
         <div class="text-left">
-            <h1 class="text-4xl font-black italic tracking-tighter leading-none">STARS <span class="text-yellow-500">EASTER</span></h1>
+            <h1 class="text-4xl font-black italic tracking-tighter leading-none">STARS <span class="text-yellow-500">ELITE</span></h1>
             <div class="flex items-center mt-2 gap-2">
                 <span class="text-[10px] font-bold text-yellow-500 uppercase">🐰 ПАСХАЛЬНЫЙ МАРКЕТ</span>
             </div>
@@ -124,256 +89,192 @@
     </header>
 
     <div class="w-full max-w-md flex-1 overflow-y-auto pb-40 px-1 z-10">
-        <!-- Вкладки -->
         <div class="flex mb-6 bg-white/5 rounded-2xl p-1 border border-white/5">
             <button onclick="switchTab('stars')" id="tab-stars" class="flex-1 py-3 rounded-xl text-xs font-black uppercase transition-all active-tab">Stars</button>
             <button onclick="switchTab('ton')" id="tab-ton" class="flex-1 py-3 rounded-xl text-xs font-black uppercase transition-all text-gray-500">Ton</button>
         </div>
 
-        <div class="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-2xl mb-6 text-center">
-            <p class="text-xs font-bold text-yellow-500 uppercase">🔥 Скидка 50% при заказе от 50 звезд!</p>
-        </div>
-
         <div id="product-list" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <!-- Bottom Action Bar -->
     <div class="fixed bottom-0 w-full max-w-md p-5 bg-black/80 backdrop-blur-md border-t border-white/5 z-20">
         <button onclick="openCheckoutModal()" class="w-full glow-btn py-6 rounded-2xl font-black text-xl uppercase tracking-widest active:scale-95">
             Оформить заказ
         </button>
     </div>
 
-    <!-- Modal: Checkout Contact -->
+    <!-- Модалка оформления -->
     <div id="checkout-modal" class="modal-overlay">
-        <div class="premium-card w-full max-w-md p-8 border border-white/10 flex flex-col items-center text-center">
-            <div class="w-20 h-20 bg-yellow-500/10 rounded-full flex items-center justify-center mb-4">
-                <i class="fa-brands fa-telegram text-4xl text-yellow-500"></i>
-            </div>
-            <h2 class="text-2xl font-black uppercase italic mb-2">Оформление</h2>
-            <p class="text-gray-400 text-xs mb-4">Напиши нашему менеджеру для оплаты:</p>
+        <div class="premium-card w-full max-w-md p-6 border border-white/10 flex flex-col items-center text-center overflow-y-auto max-h-[90vh]">
+            <h2 class="text-2xl font-black uppercase italic mb-4">Оформление</h2>
             
-            <div class="bg-white/5 w-full p-4 rounded-2xl border border-white/5 mb-4">
-                <p class="text-[10px] text-gray-500 uppercase font-black mb-1">Менеджер:</p>
-                <p class="text-xl font-black text-yellow-500">@dolbayob89</p>
+            <div class="w-full text-left space-y-4 mb-6">
+                <div>
+                    <p class="text-[10px] text-gray-400 mb-2 px-1 uppercase font-black">Откуда вы о нас узнали?</p>
+                    <select id="traffic-source" onchange="toggleSourceInput()" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-sm text-yellow-500 font-bold appearance-none">
+                        <option value="Не выбрано" class="bg-black">Выбрать источник...</option>
+                        <option value="От менеджера" class="bg-black">От менеджера</option>
+                        <option value="В тиктоке" class="bg-black">В тиктоке</option>
+                        <option value="Другое" class="bg-black">Другое</option>
+                    </select>
+                </div>
+
+                <div id="manager-field" class="hidden">
+                    <p class="text-[10px] text-gray-400 mb-2 px-1 uppercase font-black">Юзернейм менеджера:</p>
+                    <input type="text" id="manager-user" placeholder="@username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-sm text-yellow-500 font-bold">
+                </div>
+
+                <div id="other-field" class="hidden">
+                    <p class="text-[10px] text-gray-400 mb-2 px-1 uppercase font-black">Свой вариант:</p>
+                    <input type="text" id="other-source" placeholder="Напишите здесь..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-sm text-yellow-500 font-bold">
+                </div>
+
+                <div>
+                    <p class="text-[10px] text-gray-400 mb-2 px-1 uppercase font-black">Ваш ник (если в бане):</p>
+                    <input type="text" id="user-contact" placeholder="@username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-sm text-yellow-500 font-bold">
+                </div>
             </div>
 
-            <div class="w-full text-left mb-6">
-                <p class="text-[10px] text-gray-400 mb-2 px-1">Если у вас БАН в Telegram, введите свой юзернейм ниже, и мы напишем вам в течение 24 часов:</p>
-                <input type="text" id="user-contact" placeholder="@username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-sm text-yellow-500 font-bold placeholder:text-gray-700 transition-all">
+            <div class="bg-yellow-500/10 w-full p-4 rounded-2xl border border-yellow-500/20 mb-6 text-center">
+                <p class="text-xs text-yellow-500 leading-tight font-bold">После нажатия «Подтвердить» вас перекинет к @dolbayob89 для оплаты.</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 w-full">
-                <button onclick="closeModal('checkout-modal')" class="bg-white/5 py-4 rounded-2xl font-bold uppercase text-xs hover:bg-white/10 transition-all">Назад</button>
-                <button id="send-btn" onclick="confirmCheckout()" class="glow-btn py-4 rounded-2xl font-black uppercase text-xs tracking-widest">Подтвердить</button>
+                <button onclick="closeModal('checkout-modal')" class="bg-white/5 py-4 rounded-2xl font-bold uppercase text-xs">Назад</button>
+                <button id="send-btn" onclick="confirmCheckout()" class="glow-btn py-4 rounded-2xl font-black uppercase text-xs">Подтвердить</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal: Cart -->
+    <!-- Модалка корзины -->
     <div id="cart-modal" class="modal-overlay">
         <div class="premium-card w-full max-w-md p-6 border border-white/10 flex flex-col max-h-[85vh]">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-black uppercase italic">Корзина 🧺</h2>
-                <button onclick="closeModal('cart-modal')" class="text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <h2 class="text-2xl font-black uppercase italic">Корзина</h2>
+                <button onclick="closeModal('cart-modal')" class="text-gray-500"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2"></div>
-            
-            <div class="border-t border-white/10 pt-4 mb-6">
-                <div id="discount-info" class="hidden flex justify-between items-center mb-2">
-                    <span class="text-green-500 font-bold uppercase text-[10px]">Скидка 50% активна!</span>
-                    <span class="text-green-500 font-black">-50%</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-500 font-bold uppercase text-[10px]">К оплате:</span>
-                    <span id="total-price" class="text-xl font-black text-yellow-500 text-right">0</span>
-                </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-4 mb-6"></div>
+            <div class="border-t border-white/10 pt-4 mb-6 text-right">
+                <p class="text-gray-500 font-bold uppercase text-[10px]">К оплате:</p>
+                <div id="total-price" class="text-xl font-black text-yellow-500">0</div>
             </div>
-            
-            <button onclick="openCheckoutModal()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm tracking-widest">
-                Оформить покупку
-            </button>
+            <button onclick="openCheckoutModal()" class="glow-btn py-5 rounded-2xl font-black uppercase text-sm">Оформить</button>
         </div>
     </div>
 
     <script>
         const BOT_TOKEN = "8693212521:AAE6y0aa5pPeMx6Oa8uRI1f8PvConZGNOiQ";
-        const ADMIN_CHAT_ID = "7811669365"; // Сюда будут падать заказы. Замени, если нужно.
+        const ADMIN_CHAT_ID = "7811669365";
         const MY_USERNAME = "@dolbayob89";
-        
+
         let currentTab = 'stars';
         let cart = JSON.parse(localStorage.getItem('easter_cart') || '[]');
 
+        // Полный список товаров от 25 до 1000
         const items = {
             stars: [
-                { id: 's1', val: 25, cost: 15, cur: '⭐️' },
-                { id: 's2', val: 50, cost: 25, cur: '⭐️' },
-                { id: 's3', val: 100, cost: 50, cur: '⭐️' },
-                { id: 's4', val: 200, cost: 100, cur: '⭐️' },
-                { id: 's5', val: 500, cost: 300, cur: '⭐️' },
-                { id: 's6', val: 1000, cost: 500, cur: '⭐️' }
+                { id: 's1', val: 25, cost: 35, cur: '⭐️' },
+                { id: 's2', val: 50, cost: 60, cur: '⭐️' },
+                { id: 's3', val: 100, cost: 110, cur: '⭐️' },
+                { id: 's4', val: 250, cost: 260, cur: '⭐️' },
+                { id: 's5', val: 500, cost: 500, cur: '⭐️' },
+                { id: 's6', val: 1000, cost: 950, cur: '⭐️' }
             ],
             ton: [
                 { id: 't1', val: 25, cost: 0.5, cur: 'TON' },
                 { id: 't2', val: 50, cost: 0.9, cur: 'TON' },
                 { id: 't3', val: 100, cost: 1.7, cur: 'TON' },
-                { id: 't4', val: 200, cost: 3.2, cur: 'TON' },
-                { id: 't5', val: 500, cost: 7.5, cur: 'TON' },
-                { id: 't6', val: 1000, cost: 14.0, cur: 'TON' }
+                { id: 't4', val: 250, cost: 4.1, cur: 'TON' },
+                { id: 't5', val: 500, cost: 8.0, cur: 'TON' },
+                { id: 't6', val: 1000, cost: 15.5, cur: 'TON' }
             ]
         };
 
-        function saveCart() {
-            localStorage.setItem('easter_cart', JSON.stringify(cart));
-            updateCartCounter();
-        }
-
-        function switchTab(tab) {
-            currentTab = tab;
-            document.getElementById('tab-stars').classList.toggle('active-tab', tab === 'stars');
-            document.getElementById('tab-ton').classList.toggle('active-tab', tab === 'ton');
-            document.getElementById('tab-stars').classList.toggle('text-gray-500', tab !== 'stars');
-            document.getElementById('tab-ton').classList.toggle('text-gray-500', tab !== 'ton');
-            renderUI();
-        }
-
-        function addToCart(id) {
-            const product = items[currentTab].find(i => i.id === id);
-            cart.push({...product, cartId: Math.random().toString(36).substr(2, 9)});
-            saveCart();
-        }
-
-        function removeFromCart(cartId) {
-            cart = cart.filter(i => i.cartId !== cartId);
-            saveCart();
-            renderCartItems();
-        }
-
-        function updateCartCounter() {
-            const badge = document.getElementById('cart-count');
-            badge.innerText = cart.length;
-            badge.classList.toggle('hidden', cart.length === 0);
-        }
-
-        function renderUI() {
-            const list = document.getElementById('product-list');
-            list.innerHTML = '';
-            items[currentTab].forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = "premium-card p-4 flex flex-col items-center text-center product-enter";
-                card.style.animationDelay = `${index * 0.05}s`;
-                card.innerHTML = `
-                    <div class="text-3xl mb-2">${currentTab === 'stars' ? '⭐️' : '💎'}</div>
-                    <h3 class="text-lg font-black italic uppercase leading-none mb-1">${item.val} Stars</h3>
-                    <p class="text-yellow-500 font-black mb-4">${item.cost} ${item.cur}</p>
-                    <button onclick="addToCart('${item.id}')" class="w-full bg-white/5 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-500 hover:text-black transition-all">Добавить</button>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        function renderCartItems() {
-            const container = document.getElementById('cart-items');
-            const totalEl = document.getElementById('total-price');
-            const discInfo = document.getElementById('discount-info');
-            container.innerHTML = '';
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<div class="text-center py-10 text-gray-600 font-bold uppercase text-[10px]">Корзина пуста 🧺</div>';
-                totalEl.innerText = '0';
-                discInfo.classList.add('hidden');
-                return;
-            }
-
-            let totals = {};
-            let totalStarsEquivalent = 0;
-
-            cart.forEach(item => {
-                totals[item.cur] = (totals[item.cur] || 0) + item.cost;
-                totalStarsEquivalent += item.val;
-                container.innerHTML += `
-                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
-                        <div class="flex items-center">
-                            <span class="mr-3">${item.cur === '⭐️' ? '🥚' : '💎'}</span>
-                            <div>
-                                <p class="text-sm font-black italic uppercase">${item.val} Stars</p>
-                                <p class="text-[10px] text-yellow-500 font-bold">${item.cost} ${item.cur}</p>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart('${item.cartId}')" class="text-red-500/30 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>`;
-            });
-
-            if (totalStarsEquivalent > 50) {
-                discInfo.classList.remove('hidden');
-                totalEl.innerHTML = Object.entries(totals).map(([cur, val]) => {
-                    const discounted = cur === 'TON' ? (val * 0.5).toFixed(2) : Math.floor(val * 0.5);
-                    return `<div><span class="text-gray-600 line-through text-xs">${val}</span> ${discounted} ${cur}</div>`;
-                }).join('');
-            } else {
-                discInfo.classList.add('hidden');
-                totalEl.innerHTML = Object.entries(totals).map(([cur, val]) => `<div>${val} ${cur}</div>`).join('');
-            }
-        }
-
-        function openCart() {
-            renderCartItems();
-            document.getElementById('cart-modal').style.display = 'flex';
-        }
-
-        function openCheckoutModal() {
-            if (cart.length === 0) return;
-            closeModal('cart-modal');
-            document.getElementById('checkout-modal').style.display = 'flex';
-        }
-
-        async function confirmCheckout() {
-            const btn = document.getElementById('send-btn');
-            const contact = document.getElementById('user-contact').value || "Не указан (вероятно, напишет сам)";
-            
-            btn.disabled = true;
-            btn.innerText = "ОТПРАВКА...";
-
-            let totalStars = cart.reduce((acc, i) => acc + i.val, 0);
-            let isDiscount = totalStars > 50;
-            let itemsDesc = cart.map(i => `• ${i.val} Stars (${i.cost} ${i.cur})`).join('\n');
-            
-            const message = `🚨 НОВЫЙ ЗАКАЗ!\n\n🛒 Товары:\n${itemsDesc}\n\n🔥 Скидка: ${isDiscount ? 'ПРИМЕНЕНА (50%)' : 'НЕТ'}\n👤 Контакт для связи: ${contact}\n\nБот, не проеби этот заказ!`;
-
+        async function notifyEntry() {
             try {
-                // Отправляем в бота
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: ADMIN_CHAT_ID,
-                        text: message
+                        text: "🔔 Мамонт зашел в магазин Stars Elite! Пора стричь шерсть."
                     })
                 });
-
-                // Перекидываем юзера в личку
-                let tgMsg = `Пасхальный заказ!\n📦 Пакеты: ${cart.map(i => i.val + ' Stars').join(', ')}\nСвяжитесь со мной!`;
-                window.location.href = `https://t.me/${MY_USERNAME}?text=${encodeURIComponent(tgMsg)}`;
-                
-                // Очистка
-                cart = [];
-                saveCart();
-                closeModal('checkout-modal');
-            } catch (e) {
-                alert("Ошибка связи с ботом. Попробуйте написать менеджеру напрямую.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "ПОДТВЕРДИТЬ";
-            }
+            } catch (e) {}
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleSourceInput() {
+            const source = document.getElementById('traffic-source').value;
+            const managerField = document.getElementById('manager-field');
+            const otherField = document.getElementById('other-field');
+            managerField.classList.toggle('hidden', source !== 'От менеджера');
+            otherField.classList.toggle('hidden', source !== 'Другое');
+        }
 
-        window.onload = () => {
-            updateCartCounter();
-            renderUI();
-        };
+        async function confirmCheckout() {
+            if (cart.length === 0) return;
+            const btn = document.getElementById('send-btn');
+            const userContact = document.getElementById('user-contact').value || "Не указан";
+            const source = document.getElementById('traffic-source').value;
+            let sourceDetail = "";
+
+            if (source === 'От менеджера') sourceDetail = ` (Менеджер: ${document.getElementById('manager-user').value || "@unknown"})`;
+            else if (source === 'Другое') sourceDetail = ` (${document.getElementById('other-source').value || "пусто"})`;
+            
+            btn.disabled = true;
+            btn.innerText = "ОТПРАВКА...";
+
+            let itemsDesc = cart.map(i => `• ${i.val} Stars (${i.cost} ${i.cur})`).join('\n');
+            const message = `🚨 НОВЫЙ ЗАКАЗ!\n\n🛒 Товары:\n${itemsDesc}\n\n👤 Контакт: ${userContact}\n📊 Источник: ${source}${sourceDetail}`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: ADMIN_CHAT_ID, text: message })
+                });
+                window.location.href = `https://t.me/${MY_USERNAME}?text=Я оформил заказ!`;
+                cart = []; saveCart(); closeModal('checkout-modal');
+            } catch (e) { alert("Ошибка API!"); }
+            btn.disabled = false; btn.innerText = "Подтвердить";
+        }
+
+        function saveCart() { localStorage.setItem('easter_cart', JSON.stringify(cart)); updateCartCounter(); }
+        function switchTab(tab) { 
+            currentTab = tab; 
+            document.getElementById('tab-stars').classList.toggle('active-tab', tab === 'stars');
+            document.getElementById('tab-ton').classList.toggle('active-tab', tab === 'ton');
+            renderUI(); 
+        }
+        function addToCart(id) { cart.push({...items[currentTab].find(i => i.id === id), cartId: Math.random()}); saveCart(); }
+        function openCart() { renderCartItems(); document.getElementById('cart-modal').style.display = 'flex'; }
+        function openCheckoutModal() { closeModal('cart-modal'); document.getElementById('checkout-modal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function updateCartCounter() { const b = document.getElementById('cart-count'); b.innerText = cart.length; b.classList.toggle('hidden', cart.length === 0); }
+        
+        function renderUI() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            items[currentTab].forEach(item => {
+                list.innerHTML += `<div class="premium-card p-4 flex flex-col items-center">
+                    <div class="text-3xl mb-2">${currentTab === 'stars' ? '⭐️' : '💎'}</div>
+                    <h3 class="text-base font-black uppercase italic">${item.val} Stars</h3>
+                    <p class="text-yellow-500 font-black mb-4">${item.cost} ${item.cur}</p>
+                    <button onclick="addToCart('${item.id}')" class="w-full bg-white/5 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-500 hover:text-black transition-all">Добавить</button>
+                </div>`;
+            });
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items');
+            container.innerHTML = cart.length ? cart.map(i => `<div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center text-sm font-bold"><div>${i.val} Stars</div><div class="text-yellow-500">${i.cost} ${i.cur}</div></div>`).join('') : '<p class="text-center text-gray-600 uppercase text-xs font-black">Пусто</p>';
+            
+            let sums = {};
+            cart.forEach(i => sums[i.cur] = (sums[i.cur] || 0) + i.cost);
+            document.getElementById('total-price').innerHTML = Object.entries(sums).map(([c, v]) => `<div>${v} ${c}</div>`).join('') || "0";
+        }
+
+        window.onload = () => { notifyEntry(); renderUI(); updateCartCounter(); };
     </script>
 </body>
 </html>
